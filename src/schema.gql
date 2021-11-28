@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Restaurant {
+  name: String!
+  isVegan: Boolean
+  address: String!
+  ownersName: String!
+}
+
 type Query {
-  isPizzaGood: Boolean!
+  restaurants(veganOnly: Boolean!): [Restaurant!]!
+}
+
+type Mutation {
+  createRestaurant(name: String!, isVegan: Boolean, address: String!, ownersName: String!): Boolean!
 }

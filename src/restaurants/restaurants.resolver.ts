@@ -4,6 +4,6 @@ import { Query, Resolver } from '@nestjs/graphql';
 export class RestaurantResolver {
   @Query(returns => Boolean)
   isPizzaGood(): Boolean {
-    return false;
+    return true;
   }
 }

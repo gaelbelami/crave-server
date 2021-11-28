@@ -3,10 +3,12 @@
 # ------------------------------------------------------
 
 type Restaurant {
+  id: Float!
   name: String!
   isVegan: Boolean
   address: String!
   ownersName: String!
+  categoryName: String!
 }
 
 type Query {

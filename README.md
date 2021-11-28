@@ -19,4 +19,7 @@ npm install --save @nestjs/typeorm typeorm pg
 npm i --save @nestjs/config
 
 #Allows the env files to be accessible on any ecosystem
+
 npm i cross-env
+#For validating the env variables
+npm i joi

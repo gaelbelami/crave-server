@@ -6,6 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { Restaurant } from './restaurants/entities/restaurant.entity';
+import { UsersModule } from './users/users.module';
+import { AdminModule } from './admin/admin.module';
+import { SharedModule } from './shared/shared.module';
+import { User } from './users/entities/user.entity';
+import { Admin } from './admin/entities/admin.entity';
 
 @Module({
   imports: [
@@ -31,7 +36,7 @@ import { Restaurant } from './restaurants/entities/restaurant.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Restaurant],
+      entities: [User, Admin],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
@@ -39,7 +44,13 @@ import { Restaurant } from './restaurants/entities/restaurant.entity';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     
-    RestaurantsModule,
+    // RestaurantsModule,
+    
+    UsersModule,
+    
+    AdminModule,
+    
+    SharedModule,
   ],
   controllers: [],
   providers: [],

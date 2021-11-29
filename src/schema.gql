@@ -2,41 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Restaurant {
-  id: Float!
-  name: String!
-  isVegan: Boolean!
-  address: String!
-  ownersName: String!
-  categoryName: String!
-}
-
 type Query {
-  restaurants: [Restaurant!]!
-}
-
-type Mutation {
-  createRestaurant(createRestaurantDto: CreateRestaurantDto!): Boolean!
-  updateRestaurant(updateRestaurantDto: UpdateRestaurantDto!): Boolean!
-}
-
-input CreateRestaurantDto {
-  name: String!
-  isVegan: Boolean = true
-  address: String!
-  ownersName: String!
-  categoryName: String!
-}
-
-input UpdateRestaurantDto {
-  id: Float!
-  data: UpdateRestaurantInputType!
-}
-
-input UpdateRestaurantInputType {
-  name: String
-  isVegan: Boolean = true
-  address: String
-  ownersName: String
-  categoryName: String
+  hi: Boolean!
 }

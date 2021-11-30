@@ -26,3 +26,6 @@ npm i joi
 
 npm i bcrypt
 #For hashing the password
+
+npm i jsonwebtoken
+#Generating a jsonwebtoken

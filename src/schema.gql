@@ -2,6 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  firstName: String!
+  lastName: String!
+  username: String
+  phoneNumber: Float
+  address: String
+  birthdate: DateTime
+  email: String!
+  password: String!
+  role: UserRole!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum UserRole {
+  client
+  owner
+  delivery
+}
+
 type CreateUserAccountOutput {
   message: String
   ok: Boolean!
@@ -14,7 +37,7 @@ type LoginUserOutput {
 }
 
 type Query {
-  hi: Boolean!
+  me: User!
 }
 
 type Mutation {
@@ -28,12 +51,6 @@ input CreateUserAccountInput {
   email: String!
   password: String!
   role: UserRole!
-}
-
-enum UserRole {
-  client
-  owner
-  delivery
 }
 
 input LoginUserInput {

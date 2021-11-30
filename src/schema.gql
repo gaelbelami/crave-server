@@ -2,6 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CreateUserAccountOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Query {
   hi: Boolean!
+}
+
+type Mutation {
+  createUserAccount(createUserAccountInput: CreateUserAccountInput!): CreateUserAccountOutput!
+}
+
+input CreateUserAccountInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  role: UserRole!
+}
+
+enum UserRole {
+  client
+  owner
+  delivery
 }

@@ -23,3 +23,6 @@ npm i --save @nestjs/config
 npm i cross-env
 #For validating the env variables
 npm i joi
+
+npm i bcrypt
+#For hashing the password

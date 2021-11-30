@@ -3,6 +3,7 @@ import {
   CreateUserAccountInput,
   CreateUserAccountOutput,
 } from './dtos/create-user-account.dto';
+import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
 
@@ -10,7 +11,7 @@ import { UserService } from './users.service';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(returns => Boolean)
+  @Query((returns) => Boolean)
   hi() {
     return true;
   }
@@ -21,18 +22,27 @@ export class UserResolver {
     createUserAccountInput: CreateUserAccountInput,
   ): Promise<CreateUserAccountOutput> {
     try {
-      const {ok, message } = await this.userService.createUserAccount(
+      return await this.userService.createUserAccount(
         createUserAccountInput,
       );
-      
-      return {
-        ok,
-        message,
-      };
     } catch (error) {
       return {
         message: error,
         ok: false,
+      };
+    }
+  }
+
+  @Mutation(returns => LoginUserOutput)
+  async loginUser(
+    @Args('loginUserInput') loginUserInput: LoginUserInput,
+  ): Promise<LoginUserOutput> {
+    try {
+      return this.userService.loginUser(loginUserInput);
+    } catch (error) {
+      return {
+        ok: false,
+        message: error,
       };
     }
   }

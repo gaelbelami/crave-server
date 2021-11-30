@@ -5,6 +5,7 @@ import {
   CreateUserAccountInput,
   CreateUserAccountOutput,
 } from './dtos/create-user-account.dto';
+import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -22,6 +23,7 @@ export class UserService {
     role,
   }: CreateUserAccountInput): Promise<CreateUserAccountOutput> {
     // Check new user
+    // Hash the password
     try {
       const exists = await this.userRepository.findOne({ email });
       if (exists) {
@@ -49,6 +51,37 @@ export class UserService {
         message: "Couldn't create user.",
       };
     }
-    // Create user &  hash password
+  }
+
+  async loginUser({ email, password}: LoginUserInput): Promise<LoginUserOutput>{
+    // find the user with te email
+    // check if the password is correct
+    // make a jwt and give it to the user  
+    try {
+          const user = await this.userRepository.findOne({email})
+        if(!user){
+            return {
+                ok: false,
+                message: "User not found",
+            }
+        }
+        const passwordCorrect = await user.checkPassword(password);
+        if(!passwordCorrect){
+            return {
+                ok: false,
+                message: "Wrong password",
+            }
+        }
+
+        return {
+            ok: true,
+            token: "Am a token"
+        }
+      } catch (error) {
+          return {
+              ok: false,
+              message: error,
+          }
+      }
   }
 }

@@ -75,4 +75,12 @@ export class AdminService {
       }
     }
   }
+
+
+  async findById(id: number): Promise<Admin>{
+    
+      return this.adminRespository.findOne({id}) 
+     
+     
+  }
 }

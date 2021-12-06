@@ -46,7 +46,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({req}) => ({user: req['user']}),
+      context: ({req}) => ({admin: req['admin']} || {user: req['user']} ),
     }),
      JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,

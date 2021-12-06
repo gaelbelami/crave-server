@@ -36,6 +36,14 @@ type LoginUserOutput {
   token: String
 }
 
+type Admin {
+  firstName: String
+  lastName: String
+  email: String!
+  password: String!
+  role: String!
+}
+
 type CreateAdminAccountOutput {
   message: String
   ok: Boolean!
@@ -49,6 +57,7 @@ type LoginAdminOutput {
 
 type Query {
   me: User!
+  Admin: Admin!
 }
 
 type Mutation {

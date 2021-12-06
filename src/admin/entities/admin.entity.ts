@@ -1,4 +1,4 @@
-import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import * as bcrypt from 'bcrypt'
 import { CoreEntity } from 'src/shared/entities/core.entity';
@@ -15,6 +15,7 @@ enum AdminRole {
 registerEnumType(AdminRole, { name: "AdminRole" })
 
 @InputType({isAbstract: true})
+@ObjectType()
 @Entity()
 export class Admin extends CoreEntity {
   @Column({nullable: true})

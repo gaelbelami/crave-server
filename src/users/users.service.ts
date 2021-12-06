@@ -16,7 +16,6 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly config: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -74,14 +73,14 @@ export class UserService {
         if(!passwordCorrect){
             return {
                 ok: false,
-                message: "Wrong password",
+                message: "Wrong email or password",
             }
         }
         const token = this.jwtService.sign({id: user.id})
 
         return {
             ok: true,
-            token
+            token,
         }
       } catch (error) {
           return {

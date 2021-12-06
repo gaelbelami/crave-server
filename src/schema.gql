@@ -41,6 +41,12 @@ type CreateAdminAccountOutput {
   ok: Boolean!
 }
 
+type LoginAdminOutput {
+  message: String
+  ok: Boolean!
+  token: String
+}
+
 type Query {
   me: User!
 }
@@ -49,6 +55,7 @@ type Mutation {
   createUserAccount(createUserAccountInput: CreateUserAccountInput!): CreateUserAccountOutput!
   loginUser(loginUserInput: LoginUserInput!): LoginUserOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!
+  loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
 }
 
 input CreateUserAccountInput {
@@ -65,6 +72,11 @@ input LoginUserInput {
 }
 
 input CreateAdminAccountInput {
+  email: String!
+  password: String!
+}
+
+input LoginAdminInput {
   email: String!
   password: String!
 }

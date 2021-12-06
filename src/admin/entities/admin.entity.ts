@@ -47,12 +47,22 @@ export class Admin extends CoreEntity {
 
 
   @BeforeInsert()
-  async hashPassword(){
+  async hashPassword(): Promise<void>{
     try {
       this.password = await bcrypt.hash(this.password, 10)      
     } catch (error) {
       console.log(error)
      throw new InternalServerErrorException()
+    }
+  }
+
+  async checkPassword(aPassword: string): Promise<boolean>{
+    try {
+      const ok = await bcrypt.compare(aPassword, this.password)
+      return ok;
+    } catch (error) {
+      console.log(error)
+      throw new InternalServerErrorException()
     }
   }
 }

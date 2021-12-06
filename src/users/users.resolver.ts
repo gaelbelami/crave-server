@@ -8,7 +8,7 @@ import {
 } from './dtos/create-user-account.dto';
 import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
-import { UserService } from './users.service';
+import { UserService } from './users.service'; 
 
 @Resolver(of => User)
 export class UserResolver {

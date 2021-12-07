@@ -9,6 +9,7 @@ import {
 import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service'; 
+import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 
 @Resolver(of => User)
 export class UserResolver {
@@ -47,5 +48,27 @@ export class UserResolver {
   @UseGuards(AuthUserGuard)
   me(@AuthUser() loggedInUser: User) {
     return loggedInUser;
+  }
+
+
+
+  @UseGuards(AuthUserGuard)
+  @Query(returns => UserProfileOutput)
+  async userProfile(@Args() userProfileInput: UserProfileInput): Promise<UserProfileOutput>{
+    try {
+      const user = await this.userService.findById(userProfileInput.userId); 
+      if(!user){
+        throw Error();
+      }
+      return {
+        ok: true,
+        user,
+      }
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'User not found',
+      }
+    }
   }
 }

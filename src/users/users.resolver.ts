@@ -10,6 +10,7 @@ import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service'; 
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
+import { EditUserProfileInput, EditUserProfileOutput } from './dtos/edit-user-profile.dto';
 
 @Resolver(of => User)
 export class UserResolver {
@@ -49,7 +50,7 @@ export class UserResolver {
   me(@AuthUser() loggedInUser: User) {
     return loggedInUser;
   }
-
+ 
 
 
   @UseGuards(AuthUserGuard)
@@ -71,4 +72,24 @@ export class UserResolver {
       }
     }
   }
+
+
+  @UseGuards(AuthUserGuard)
+  @Mutation(returns => EditUserProfileOutput)
+  async editUserProfile(@AuthUser() loggedInUser: User,
+   @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput): Promise<EditUserProfileOutput>{
+      try {
+        await this.userService.editUserProfile(loggedInUser.id, editUserProfileInput)
+        return {
+        ok: true,
+        message: 'User info updated successfully'
+      }
+      } catch (error) {
+        return {
+          ok: false,
+          message: error,
+        }
+      }
+  }
 }
+ 

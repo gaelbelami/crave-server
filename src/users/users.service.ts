@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as jwt from 'jsonwebtoken'
 import {
   CreateUserAccountInput,
   CreateUserAccountOutput,
 } from './dtos/create-user-account.dto';
 import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from 'src/jwt/jwt.service';
+import {
+  EditUserProfileInput,
+} from './dtos/edit-user-profile.dto';
 
 @Injectable()
 export class UserService {
@@ -57,41 +58,78 @@ export class UserService {
     }
   }
 
-  async loginUser({ email, password}: LoginUserInput): Promise<LoginUserOutput>{
+  async loginUser({
+    email,
+    password,
+  }: LoginUserInput): Promise<LoginUserOutput> {
     // find the user with te email
     // check if the password is correct
-    // make a jwt and give it to the user  
+    // make a jwt and give it to the user
     try {
-          const user = await this.userRepository.findOne({email})
-        if(!user){
-            return {
-                ok: false,
-                message: "User not found",
-            }
-        }
-        const passwordCorrect = await user.checkPassword(password);
-        if(!passwordCorrect){
-            return {
-                ok: false,
-                message: "Wrong email or password",
-            }
-        }
-        const token = this.jwtService.sign({id: user.id})
-
+      const user = await this.userRepository.findOne({ email });
+      if (!user) {
         return {
-            ok: true,
-            token,
-        }
-      } catch (error) {
-          return {
-              ok: false,
-              message: error,
-          }
+          ok: false,
+          message: 'User not found',
+        };
       }
+      const passwordCorrect = await user.checkPassword(password);
+      if (!passwordCorrect) {
+        return {
+          ok: false,
+          message: 'Wrong email or password',
+        };
+      }
+      const token = this.jwtService.sign({ id: user.id });
+
+      return {
+        ok: true,
+        token,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: error,
+      };
+    }
   }
 
-
-  async findById(id: number): Promise<User>{
+  async findById(id: number): Promise<User> {
     return this.userRepository.findOne({ id });
+  }
+
+  async editUserProfile(
+    userId: number,
+    {firstName, lastName, email, password, username, phoneNumber, address, birthdate}: EditUserProfileInput,
+  ) : Promise<User>{
+    const user = await this.userRepository.findOne(userId);
+    
+      if(firstName) {
+        user.firstName = firstName;
+      }
+      if(lastName) {
+        user.lastName = lastName;
+      }
+      if(email) {
+        user.email = email;
+      }
+      if(password) {
+        user.password = password;
+      }
+      if(username) {
+        user.username = username;
+      }
+      if(address) {
+        user.address = address;
+      }
+      if(birthdate) {
+        user.birthdate = birthdate;
+      }
+      if(phoneNumber) {
+        user.phoneNumber = phoneNumber;
+      }
+
+    
+    return this.userRepository.save(user);
   }
 }

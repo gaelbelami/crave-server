@@ -45,6 +45,11 @@ type UserProfileOutput {
   user: User
 }
 
+type EditUserProfileOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Admin {
   id: Float!
   createdAt: DateTime!
@@ -76,6 +81,7 @@ type Query {
 type Mutation {
   createUserAccount(createUserAccountInput: CreateUserAccountInput!): CreateUserAccountOutput!
   loginUser(loginUserInput: LoginUserInput!): LoginUserOutput!
+  editUserProfile(editUserProfileInput: EditUserProfileInput!): EditUserProfileOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!
   loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
 }
@@ -91,6 +97,17 @@ input CreateUserAccountInput {
 input LoginUserInput {
   email: String!
   password: String!
+}
+
+input EditUserProfileInput {
+  firstName: String
+  lastName: String
+  username: String
+  phoneNumber: Float
+  address: String
+  birthdate: DateTime
+  email: String
+  password: String
 }
 
 input CreateAdminAccountInput {

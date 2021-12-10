@@ -1,19 +1,24 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import * as Joi from 'joi'
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
+import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { RestaurantsModule } from './restaurants/restaurants.module';
-import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { UsersModule } from './users/users.module';
 import { AdminModule } from './admin/admin.module';
-import { SharedModule } from './shared/shared.module';
 import { User } from './users/entities/user.entity';
 import { Admin } from './admin/entities/admin.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middlewares';
 import { AuthModule } from './auth/auth.module';
+import { UserVerification } from './verification/entities/user.verification.entity';
+import { EmailModule } from './verification/email.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -30,9 +35,12 @@ import { AuthModule } from './auth/auth.module';
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         PRIVATE_KEY: Joi.string().required(),
-      })
+        MAILGUN_API_KEY: Joi.string().required(),
+        MAILGUN_DOMAIN_NAME: Joi.string().required(),
+        MAILGUN_FROM_EMAIL: Joi.string().required(),
+      }),
     }),
-    
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -40,35 +48,42 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin],
+      entities: [User, Admin, UserVerification],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({req}) => ({admin: req['admin']} && {user: req['user']} ),
+      context: ({ req }) => ({ admin: req['admin'] } && { user: req['user'] }),
     }),
-     JwtModule.forRoot({
+    JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
     }),
+    MailModule.forRoot({
+      apiKey: process.env.MAILGUN_API_KEY,
+      emailDomain: process.env.MAILGUN_DOMAIN_NAME,
+      fromEmail: process.env.MAILGUN_FROM_EMAIL,
+    }),
     // RestaurantsModule,
-    
+
     UsersModule,
-    
+
     AdminModule,
-    
+
     AuthModule,
+
+    EmailModule,
+
     
-   
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule{
-  configure(consumer: MiddlewareConsumer){
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
     consumer.apply(JwtMiddleware).forRoutes({
-      path:"/graphql",
+      path: '/graphql',
       method: RequestMethod.ALL,
-    })
+    });
   }
 }

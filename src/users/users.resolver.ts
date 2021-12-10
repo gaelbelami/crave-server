@@ -8,88 +8,85 @@ import {
 } from './dtos/create-user-account.dto';
 import { LoginUserInput, LoginUserOutput } from './dtos/login-user-account.dto';
 import { User } from './entities/user.entity';
-import { UserService } from './users.service'; 
+import { UserService } from './users.service';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
-import { EditUserProfileInput, EditUserProfileOutput } from './dtos/edit-user-profile.dto';
+import {
+  EditUserProfileInput,
+  EditUserProfileOutput,
+} from './dtos/edit-user-profile.dto';
+import {
+  VerifyEmailInput,
+  VerifyEmailOutput,
+} from 'src/verification/dtos/user.verification.dto';
 
-@Resolver(of => User)
+@Resolver((of) => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Mutation(returns => CreateUserAccountOutput)
+  //********************************************CREATE ACCOUNT RESOLVER********************************************//
+  //**************************************************************************************************************//
+
+  @Mutation((returns) => CreateUserAccountOutput)
   async createUserAccount(
     @Args('createUserAccountInput')
     createUserAccountInput: CreateUserAccountInput,
   ): Promise<CreateUserAccountOutput> {
-    try {
-      return await this.userService.createUserAccount(createUserAccountInput);
-    } catch (error) {
-      return {
-        message: error,
-        ok: false,
-      };
-    }
+    return this.userService.createUserAccount(createUserAccountInput);
   }
 
-  @Mutation(returns => LoginUserOutput)
+  //************************************************LOGIN RESOLVER*************************************************//
+  //**************************************************************************************************************//
+
+  @Mutation((returns) => LoginUserOutput)
   async loginUser(
     @Args('loginUserInput') loginUserInput: LoginUserInput,
   ): Promise<LoginUserOutput> {
-    try {
-      return this.userService.loginUser(loginUserInput);
-    } catch (error) {
-      return {
-        ok: false,
-        message: error,
-      };
-    }
+    return this.userService.loginUser(loginUserInput);
   }
 
-  @Query(returns => User)
+  //****************************************AUTHENCTICATED USER RESOLVER*******************************************//
+  //**************************************************************************************************************//
+
+  @Query((returns) => UserProfileOutput)
   @UseGuards(AuthUserGuard)
   me(@AuthUser() loggedInUser: User) {
+    console.log(loggedInUser);
     return loggedInUser;
   }
- 
 
+  //********************************************USER PROFILE RESOLVER**********************************************//
+  //**************************************************************************************************************//
 
   @UseGuards(AuthUserGuard)
-  @Query(returns => UserProfileOutput)
-  async userProfile(@Args() userProfileInput: UserProfileInput): Promise<UserProfileOutput>{
-    try {
-      const user = await this.userService.findById(userProfileInput.userId); 
-      if(!user){
-        throw Error();
-      }
-      return {
-        ok: true,
-        user,
-      }
-    } catch (error) {
-      return {
-        ok: false,
-        message: 'User not found',
-      }
-    }
+  @Query((returns) => UserProfileOutput)
+  async userProfile(
+    @Args() userProfileInput: UserProfileInput,
+  ): Promise<UserProfileOutput> {
+    return this.userService.findUserById(userProfileInput.userId);
   }
 
+  //**********************************************EDIT PROFILE RESOLVER********************************************//
+  //**************************************************************************************************************//
 
   @UseGuards(AuthUserGuard)
-  @Mutation(returns => EditUserProfileOutput)
-  async editUserProfile(@AuthUser() loggedInUser: User,
-   @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput): Promise<EditUserProfileOutput>{
-      try {
-        await this.userService.editUserProfile(loggedInUser.id, editUserProfileInput)
-        return {
-        ok: true,
-        message: 'User info updated successfully'
-      }
-      } catch (error) {
-        return {
-          ok: false,
-          message: error,
-        }
-      }
+  @Mutation((returns) => EditUserProfileOutput)
+  async editUserProfile(
+    @AuthUser() loggedInUser: User,
+    @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput,
+  ): Promise<EditUserProfileOutput> {
+    return this.userService.editUserProfile(
+      loggedInUser.id,
+      editUserProfileInput,
+    );
+  }
+
+  //*********************************************VERIFY EMAIL RESOLVER*********************************************//
+  //**************************************************************************************************************//
+
+  @Mutation((returns) => VerifyEmailOutput)
+  async verifyEmailUser(
+    @Args('verifyEmailUserInput') { code }: VerifyEmailInput,
+  ): Promise<VerifyEmailOutput> {
+    return this.userService.verifyEmailUser(code);
   }
 }
- 

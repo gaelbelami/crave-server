@@ -16,6 +16,8 @@ import { UserVerification } from '../verification/entities/user.verification.ent
 import { VerifyEmailOutput } from 'src/verification/dtos/user.verification.dto';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 import { MailService } from 'src/mail/mail.service';
+import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
+import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
 
 @Injectable()
 export class UserService {
@@ -135,9 +137,7 @@ export class UserService {
 
       const user = await this.userRepository.findOne({ id });
 
-      if (user) {
-        return { user, ok: false };
-      }
+      return { user, ok: true };      
 
     } catch (error) {
 
@@ -255,5 +255,42 @@ export class UserService {
       return { ok: false, message: error };
 
     }
+    
   }
+
+
+  async deleteUserAccount(id: number): Promise<DeleteUserAccountOutput> {
+      try {
+        const user = await this.userRepository.findOne(id)
+        if(!user){
+          return {
+            ok: false,
+            message: 'No User Found'
+          }
+        }
+        
+        await this.userRepository.remove(user)
+        return { ok: true, message: 'User Account deleted successfully'}
+      } catch (error) {
+        return { ok: false, message: "Couldn't delete the account" }
+      }
+  }
+
+
+  async forgotPasswordUser({email, password}: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput>{
+    try {
+      const user = this.userRepository.findOne({email});
+      if(!user){
+        return {
+          ok: false,
+          message: "The email given doesn't correspond to any of our users."
+        }
+      }
+
+      
+    } catch (error) {
+      
+    }
+  }
+  
 }

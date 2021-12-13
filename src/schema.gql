@@ -56,6 +56,12 @@ type EditUserProfileOutput {
   ok: Boolean!
 }
 
+type DeleteUserAccountOutput {
+  message: String
+  ok: Boolean!
+  user: User!
+}
+
 type Admin {
   id: Float!
   createdAt: DateTime!
@@ -87,6 +93,7 @@ type Query {
 type Mutation {
   createUserAccount(createUserAccountInput: CreateUserAccountInput!): CreateUserAccountOutput!
   loginUser(loginUserInput: LoginUserInput!): LoginUserOutput!
+  deleteUserAccount: DeleteUserAccountOutput!
   editUserProfile(editUserProfileInput: EditUserProfileInput!): EditUserProfileOutput!
   verifyEmailUser(verifyEmailUserInput: VerifyEmailInput!): VerifyEmailOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!

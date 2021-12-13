@@ -18,6 +18,7 @@ import {
   VerifyEmailInput,
   VerifyEmailOutput,
 } from 'src/verification/dtos/user.verification.dto';
+import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -47,8 +48,8 @@ export class UserResolver {
   //****************************************AUTHENCTICATED USER RESOLVER*******************************************//
   //**************************************************************************************************************//
 
-  @Query((returns) => UserProfileOutput)
   @UseGuards(AuthUserGuard)
+  @Query((returns) => UserProfileOutput)
   me(@AuthUser() loggedInUser: User) {
     console.log(loggedInUser);
     return loggedInUser;
@@ -65,6 +66,17 @@ export class UserResolver {
     return this.userService.findUserById(userProfileInput.userId);
   }
 
+
+  //********************************************DELETE USER ACCOUNT RESOLVER**********************************************//
+  //**************************************************************************************************************//
+  @UseGuards(AuthUserGuard)
+  @Mutation( returns => DeleteUserAccountOutput)
+  async deleteUserAccount(@AuthUser() loggedInUser: User):Promise<DeleteUserAccountOutput> {
+    console.log(loggedInUser)
+    return this.userService.deleteUserAccount(loggedInUser.id)
+  }
+  
+
   //**********************************************EDIT PROFILE RESOLVER********************************************//
   //**************************************************************************************************************//
 
@@ -74,6 +86,7 @@ export class UserResolver {
     @AuthUser() loggedInUser: User,
     @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput,
   ): Promise<EditUserProfileOutput> {
+  
     return this.userService.editUserProfile(
       loggedInUser.id,
       editUserProfileInput,

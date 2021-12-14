@@ -62,6 +62,11 @@ type DeleteUserAccountOutput {
   user: User!
 }
 
+type ForgotUserPasswordOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Admin {
   id: Float!
   createdAt: DateTime!
@@ -96,6 +101,7 @@ type Mutation {
   deleteUserAccount: DeleteUserAccountOutput!
   editUserProfile(editUserProfileInput: EditUserProfileInput!): EditUserProfileOutput!
   verifyEmailUser(verifyEmailUserInput: VerifyEmailInput!): VerifyEmailOutput!
+  forgotUserPassword(forgotUserPasswordInput: ForgotUserPasswordInput!): ForgotUserPasswordOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!
   loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
 }
@@ -126,6 +132,11 @@ input EditUserProfileInput {
 
 input VerifyEmailInput {
   code: String!
+}
+
+input ForgotUserPasswordInput {
+  id: Float!
+  email: String!
 }
 
 input CreateAdminAccountInput {

@@ -19,6 +19,7 @@ import {
   VerifyEmailOutput,
 } from 'src/verification/dtos/user.verification.dto';
 import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
+import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -101,5 +102,10 @@ export class UserResolver {
     @Args('verifyEmailUserInput') { code }: VerifyEmailInput,
   ): Promise<VerifyEmailOutput> {
     return this.userService.verifyEmailUser(code);
+  }
+
+  @Mutation(returns => ForgotUserPasswordOutput)
+  async forgotUserPassword(@Args('forgotUserPasswordInput') forgotUserPasswordInput: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput> {
+    return this.userService.forgotPasswordUser(forgotUserPasswordInput)
   }
 }

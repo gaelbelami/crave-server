@@ -277,9 +277,9 @@ export class UserService {
   }
 
 
-  async forgotPasswordUser({email, password}: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput>{
+  async forgotPasswordUser({email}: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput>{
     try {
-      const user = this.userRepository.findOne({email});
+      const user = await this.userRepository.findOne({email});
       if(!user){
         return {
           ok: false,
@@ -287,9 +287,24 @@ export class UserService {
         }
       }
 
+      if(email){
+        user.email = email;
+      }
+
+      const verification = await this.userVerificationRepository.save(
+        this.userVerificationRepository.create({ user }),
+      );  
+
+      this.mailService.sendForgotPasswordEmail(
+        user.firstName,
+        user.email,
+        verification.code,
+      );
+
+      return { ok: true,  message: 'An email has been sent to your email. Please check out your inbox in order to reset your password' };
       
     } catch (error) {
-      
+      return { ok: false, message: error}
     }
   }
   

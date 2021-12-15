@@ -5,8 +5,8 @@ import { User } from "../entities/user.entity";
 
 
 @InputType()
-export class ForgotUserPasswordInput extends PickType(User, ["id", "email"]){}
+export class ForgotUserPasswordInput extends PickType(User, ["email"]) { }
 
 
 @ObjectType()
-export class ForgotUserPasswordOutput extends CoreOutput{}
+export class ForgotUserPasswordOutput extends CoreOutput { }

@@ -9,7 +9,7 @@ import { User } from "../../users/entities/user.entity";
 @InputType({ isAbstract: true })
 @ObjectType()
 @Entity()
-export class UserVerification extends CoreEntity {
+export class UserResetPassword extends CoreEntity {
     @Column()
     @Field(type => String)
     code: string;

@@ -16,8 +16,10 @@ import { UserVerification } from '../verification/entities/user.verification.ent
 import { VerifyEmailOutput } from 'src/verification/dtos/user.verification.dto';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 import { MailService } from 'src/mail/mail.service';
-import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
+import { DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
 import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
+import { UserResetPassword } from 'src/verification/entities/user.reset.entity';
+import { ResetPasswordUserInput, ResetPasswordUserOutput } from './dtos/reset-user-password.dto';
 
 @Injectable()
 export class UserService {
@@ -26,9 +28,11 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(UserVerification)
     private readonly userVerificationRepository: Repository<UserVerification>,
+    @InjectRepository(UserResetPassword)
+    private readonly userResetPasswordRepository: Repository<UserResetPassword>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
 
   //********************************************CREATE ACCOUNT SERVICE********************************************//
@@ -72,7 +76,7 @@ export class UserService {
         verification.code,
       );
 
-      return { ok: true,  message: 'Account created successfully' };
+      return { ok: true, message: 'Account created successfully' };
 
     } catch (error) {
 
@@ -84,7 +88,7 @@ export class UserService {
 
   //************************************************LOGIN SERVICE*************************************************//
   //**************************************************************************************************************//
-    
+
 
   async loginUser({
     email,
@@ -107,7 +111,8 @@ export class UserService {
       const passwordCorrect = await user.checkPassword(password);
 
       if (!passwordCorrect) {
-        return { ok: false, message: 'Invalid email or wrong password'
+        return {
+          ok: false, message: 'Invalid email or wrong password'
         };
 
       }
@@ -137,7 +142,7 @@ export class UserService {
 
       const user = await this.userRepository.findOne({ id });
 
-      return { user, ok: true };      
+      return { user, ok: true };
 
     } catch (error) {
 
@@ -218,9 +223,9 @@ export class UserService {
       return { ok: true, message: 'Updated profile successfully' };
 
     } catch (error) {
-      
+
       return { ok: false, message: 'Could not update profile' };
-      
+
     }
   }
 
@@ -244,7 +249,7 @@ export class UserService {
         await this.userRepository.save(verification.user);
 
         await this.userVerificationRepository.delete(verification.id);
-        
+
         return { ok: true, message: 'Email verified Successfully!' };
       }
 
@@ -255,45 +260,56 @@ export class UserService {
       return { ok: false, message: error };
 
     }
-    
+
   }
+
+
+  //*********************************************DELETE USER ACCOUNT SERVICE**********************************************//
+  //**************************************************************************************************************//
 
 
   async deleteUserAccount(id: number): Promise<DeleteUserAccountOutput> {
-      try {
-        const user = await this.userRepository.findOne(id)
-        if(!user){
-          return {
-            ok: false,
-            message: 'No User Found'
-          }
-        }
-        
-        await this.userRepository.remove(user)
-        return { ok: true, message: 'User Account deleted successfully'}
-      } catch (error) {
-        return { ok: false, message: "Couldn't delete the account" }
+
+    try {
+
+      const user = await this.userRepository.findOne(id);
+
+      if (!user) {
+
+        return { ok: false, message: 'No User Found' }
       }
+
+      await this.userRepository.remove(user)
+
+      return { ok: true, message: 'User Account deleted successfully' }
+
+    } catch (error) {
+
+      return { ok: false, message: "Couldn't delete the account" }
+
+    }
   }
 
 
-  async forgotPasswordUser({email}: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput>{
+  //*********************************************FORGOT PASSWORD USER SERVICE**********************************************//
+  //**************************************************************************************************************//
+
+
+  async forgotPasswordUser({ email }: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput> {
     try {
-      const user = await this.userRepository.findOne({email});
-      if(!user){
-        return {
-          ok: false,
-          message: "The email given doesn't correspond to any of our users."
-        }
+      const user = await this.userRepository.findOne({ email });
+
+      if (!user) {
+        return { ok: false, message: "The email given doesn't correspond to any of our users." }
       }
 
-      if(email){
+      if (email) {
         user.email = email;
       }
 
-      const verification = await this.userVerificationRepository.save(
-        this.userVerificationRepository.create({ user }),
-      );  
+      const verification = await this.userResetPasswordRepository.save(
+        this.userResetPasswordRepository.create({ user }),
+      );
 
       this.mailService.sendForgotPasswordEmail(
         user.firstName,
@@ -301,11 +317,62 @@ export class UserService {
         verification.code,
       );
 
-      return { ok: true,  message: 'An email has been sent to your email. Please check out your inbox in order to reset your password' };
-      
+
+      return { ok: true, message: 'An email has been sent to your email. Please check out your inbox in order to reset your password' };
+
     } catch (error) {
-      return { ok: false, message: error}
+
+      return { ok: false, message: "Please check out your email." }
+
     }
   }
-  
+
+
+  //*********************************************RESET PASSWORD USER SERVICE**********************************************//
+  //**************************************************************************************************************//
+
+
+  async resetPasswordUser({ password, confirmPassword, code }: ResetPasswordUserInput): Promise<ResetPasswordUserOutput> {
+
+    try {
+
+      if (password !== confirmPassword) {
+
+        return { ok: false, message: 'Passwords do not match' }
+
+      }
+
+      const verification = await this.userResetPasswordRepository.findOne({ code },
+        { relations: ['user'] })
+
+      const user = verification.user;
+
+      if (!user) {
+        return { ok: false, message: "User not found" }
+      }
+
+      if (password) {
+        user.password = password;
+      }
+
+      await this.userRepository.save(user);
+
+      await this.userResetPasswordRepository.delete(verification.id);
+
+      this.mailService.sendResetPasswordEmail(
+        user.firstName,
+        user.email
+      );
+
+      return { ok: true, message: "Password updated successfully" }
+
+
+    } catch (error) {
+
+      return { ok: false, message: "Couldn't reset password" }
+
+    }
+
+  }
+
 }

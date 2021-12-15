@@ -20,10 +20,11 @@ import {
 } from 'src/verification/dtos/user.verification.dto';
 import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
 import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
+import { ResetPasswordUserInput, ResetPasswordUserOutput } from './dtos/reset-user-password.dto';
 
 @Resolver((of) => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   //********************************************CREATE ACCOUNT RESOLVER********************************************//
   //**************************************************************************************************************//
@@ -71,12 +72,12 @@ export class UserResolver {
   //********************************************DELETE USER ACCOUNT RESOLVER**********************************************//
   //**************************************************************************************************************//
   @UseGuards(AuthUserGuard)
-  @Mutation( returns => DeleteUserAccountOutput)
-  async deleteUserAccount(@AuthUser() loggedInUser: User):Promise<DeleteUserAccountOutput> {
+  @Mutation(returns => DeleteUserAccountOutput)
+  async deleteUserAccount(@AuthUser() loggedInUser: User): Promise<DeleteUserAccountOutput> {
     console.log(loggedInUser)
     return this.userService.deleteUserAccount(loggedInUser.id)
   }
-  
+
 
   //**********************************************EDIT PROFILE RESOLVER********************************************//
   //**************************************************************************************************************//
@@ -87,7 +88,7 @@ export class UserResolver {
     @AuthUser() loggedInUser: User,
     @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput,
   ): Promise<EditUserProfileOutput> {
-  
+
     return this.userService.editUserProfile(
       loggedInUser.id,
       editUserProfileInput,
@@ -107,5 +108,10 @@ export class UserResolver {
   @Mutation(returns => ForgotUserPasswordOutput)
   async forgotUserPassword(@Args('forgotUserPasswordInput') forgotUserPasswordInput: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput> {
     return this.userService.forgotPasswordUser(forgotUserPasswordInput)
+  }
+
+  @Mutation(returns => ResetPasswordUserOutput)
+  async resetPasswordUser(@Args('resetPasswordUserInput') resetPasswordUserInput: ResetPasswordUserInput): Promise<ResetPasswordUserOutput> {
+    return this.userService.resetPasswordUser(resetPasswordUserInput);
   }
 }

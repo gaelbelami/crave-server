@@ -5,11 +5,11 @@ import { User } from './entities/user.entity';
 import { UserVerification } from '../verification/entities/user.verification.entity';
 import { UserResolver } from './users.resolver';
 import { UserService } from './users.service';
+import { UserResetPassword } from 'src/verification/entities/user.reset.entity';
 
 @Module({
-    imports:[TypeOrmModule.forFeature([User, UserVerification])],
+    imports: [TypeOrmModule.forFeature([User, UserVerification, UserResetPassword])],
     providers: [UserResolver, UserService],
     exports: [UserService]
 })
-export class UsersModule {}
- 
+export class UsersModule { }

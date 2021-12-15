@@ -67,6 +67,11 @@ type ForgotUserPasswordOutput {
   ok: Boolean!
 }
 
+type ResetPasswordUserOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Admin {
   id: Float!
   createdAt: DateTime!
@@ -102,6 +107,7 @@ type Mutation {
   editUserProfile(editUserProfileInput: EditUserProfileInput!): EditUserProfileOutput!
   verifyEmailUser(verifyEmailUserInput: VerifyEmailInput!): VerifyEmailOutput!
   forgotUserPassword(forgotUserPasswordInput: ForgotUserPasswordInput!): ForgotUserPasswordOutput!
+  resetPasswordUser(resetPasswordUserInput: ResetPasswordUserInput!): ResetPasswordUserOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!
   loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
 }
@@ -135,8 +141,13 @@ input VerifyEmailInput {
 }
 
 input ForgotUserPasswordInput {
-  id: Float!
   email: String!
+}
+
+input ResetPasswordUserInput {
+  password: String!
+  code: String!
+  confirmPassword: String!
 }
 
 input CreateAdminAccountInput {

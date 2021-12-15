@@ -17,8 +17,8 @@ import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middlewares';
 import { AuthModule } from './auth/auth.module';
 import { UserVerification } from './verification/entities/user.verification.entity';
-import { EmailModule } from './verification/email.module';
 import { MailModule } from './mail/mail.module';
+import { UserResetPassword } from './verification/entities/user.reset.entity';
 
 @Module({
   imports: [
@@ -48,37 +48,40 @@ import { MailModule } from './mail/mail.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin, UserVerification],
+      entities: [User, Admin, UserVerification, UserResetPassword],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
+
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       context: ({ req }) => ({ admin: req['admin'] } && { user: req['user'] }),
     }),
+
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
     }),
+
     MailModule.forRoot({
       apiKey: process.env.MAILGUN_API_KEY,
       emailDomain: process.env.MAILGUN_DOMAIN_NAME,
       fromEmail: process.env.MAILGUN_FROM_EMAIL,
     }),
-    // RestaurantsModule,
+
+    AuthModule,
 
     UsersModule,
 
     AdminModule,
 
-    AuthModule,
 
-    EmailModule,
 
-    
   ],
   controllers: [],
   providers: [],
 })
+
+
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(JwtMiddleware).forRoutes({

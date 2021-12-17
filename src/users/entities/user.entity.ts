@@ -41,7 +41,7 @@ export class User extends CoreEntity {
   @Length(3, 15)
   lastName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   @Field((type) => String, { nullable: true })
   @IsString()
   @Length(3, 15)
@@ -111,7 +111,26 @@ export class User extends CoreEntity {
     } catch (error) {
 
       throw new InternalServerErrorException();
-      
+
     }
+  }
+
+
+  @BeforeInsert()
+  autogenerateUsername() {
+    try {
+      let result = '';
+      const prefix = 'cvid_';
+      const characters =
+        'ABCD1EF4GuxydH2IJ5KLM6NOP3QR8STUVWXYZab8cdefgh9ijklmnopq7rstuvwXCFTNNJISxyz0123456789';
+      const charactersLength = characters.length;
+      for (let i = 0; i < 14; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      this.username = `${prefix}${result}`;
+    } catch (error) {
+      return "Could't generate username"
+    }
+
   }
 }

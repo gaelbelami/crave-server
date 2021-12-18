@@ -19,6 +19,10 @@ import { AuthModule } from './auth/auth.module';
 import { UserVerification } from './verification/entities/user.verification.entity';
 import { MailModule } from './mail/mail.module';
 import { UserResetPassword } from './verification/entities/user.reset.entity';
+import { Restaurant } from './restaurants/entities/restaurant.entity';
+import { Category } from './category/entities/category.entity';
+import { RestaurantsModule } from './restaurants/restaurants.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -48,7 +52,7 @@ import { UserResetPassword } from './verification/entities/user.reset.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin, UserVerification, UserResetPassword],
+      entities: [User, Admin, Restaurant, Category, UserVerification, UserResetPassword],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
@@ -73,6 +77,10 @@ import { UserResetPassword } from './verification/entities/user.reset.entity';
     UsersModule,
 
     AdminModule,
+
+    RestaurantsModule,
+
+    CategoryModule,
 
 
 

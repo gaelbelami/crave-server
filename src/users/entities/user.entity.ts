@@ -5,10 +5,11 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { CoreEntity } from 'src/shared/entities/core.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import {
+  IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
@@ -16,6 +17,7 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 
 enum UserRole {
   client = 'client',
@@ -25,7 +27,7 @@ enum UserRole {
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
-@InputType({ isAbstract: true })
+@InputType('UserInputType', { isAbstract: true })
 @ObjectType()
 @Entity()
 export class User extends CoreEntity {
@@ -41,8 +43,8 @@ export class User extends CoreEntity {
   @Length(3, 15)
   lastName: string;
 
-  @Column({ nullable: true, unique: true })
-  @Field((type) => String, { nullable: true })
+  @Column({ unique: true })
+  @Field((type) => String)
   @IsString()
   @Length(3, 15)
   username?: string;
@@ -62,7 +64,7 @@ export class User extends CoreEntity {
   @IsDate()
   birthdate?: Date;
 
-  @Column()
+  @Column({ unique: true })
   @Field((type) => String)
   @IsEmail()
   @Length(3, 45)
@@ -81,9 +83,16 @@ export class User extends CoreEntity {
 
   @Column({ default: false })
   @Field((type) => Boolean)
+  @IsBoolean()
   verified: boolean;
 
-  // Hashing the password
+  @Field(type => [Restaurant])
+  @OneToMany(type => Restaurant, restaurant => restaurant.owner)
+  restaurants: Restaurant[];
+
+  //*********************************************HASH PASSWORD*********************************************//
+  //**************************************************************************************************************//
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword(): Promise<void> {
@@ -100,7 +109,9 @@ export class User extends CoreEntity {
     }
   }
 
-  // Checking correct password on login
+  //*********************************************CHECK PASSWORD*********************************************//
+  //**************************************************************************************************************//
+
   async checkPassword(aPassword: string): Promise<boolean> {
     try {
 
@@ -116,18 +127,29 @@ export class User extends CoreEntity {
   }
 
 
+  //*********************************************AUTOGENERATE USERNAME*********************************************//
+  //**************************************************************************************************************//
+
   @BeforeInsert()
   autogenerateUsername() {
+
     try {
+
       let result = '';
+
       const prefix = 'cvid_';
+
       const characters =
         'ABCD1EF4GuxydH2IJ5KLM6NOP3QR8STUVWXYZab8cdefgh9ijklmnopq7rstuvwXCFTNNJISxyz0123456789';
+
       const charactersLength = characters.length;
+
       for (let i = 0; i < 14; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
       }
+
       this.username = `${prefix}${result}`;
+
     } catch (error) {
       return "Could't generate username"
     }

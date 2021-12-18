@@ -15,7 +15,7 @@ export class AdminService {
     @InjectRepository(Admin)
     private readonly adminRespository: Repository<Admin>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async createAdminAccount({
     email,
@@ -46,41 +46,41 @@ export class AdminService {
     }
   }
 
-  async loginAdmin({email, password}: LoginAdminInput): Promise<LoginAdminOutput>{
+  async loginAdmin({ email, password }: LoginAdminInput): Promise<LoginAdminOutput> {
     try {
-      const admin = await this.adminRespository.findOne({email});
-      if(!admin){
+      const admin = await this.adminRespository.findOne({ email });
+      if (!admin) {
         return {
           ok: false,
           message: 'Admin not found'
         }
       }
       const passwordCorrect = await admin.checkPassword(password);
-      if(!passwordCorrect){
+      if (!passwordCorrect) {
         return {
           ok: false,
           message: "Wrong authentication credentials"
         }
       }
-      const token = this.jwtService.sign({id: admin.id});
+      const token = this.jwtService.sign({ id: admin.id });
 
       return {
         ok: true,
-        token,        
+        token,
       }
     } catch (error) {
       return {
-        ok:false,
+        ok: false,
         message: "Something wrong happened"
       }
     }
   }
 
 
-  async findById(id: number): Promise<Admin>{
-    
-      return this.adminRespository.findOne({id}) 
-     
-     
+  async findById(id: number): Promise<Admin> {
+
+    return this.adminRespository.findOne({ id })
+
+
   }
 }

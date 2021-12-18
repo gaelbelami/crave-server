@@ -68,7 +68,6 @@ export class UserResolver {
     return this.userService.findUserById(userProfileInput.userId);
   }
 
-
   //********************************************DELETE USER ACCOUNT RESOLVER**********************************************//
   //**************************************************************************************************************//
   @UseGuards(AuthUserGuard)
@@ -105,10 +104,17 @@ export class UserResolver {
     return this.userService.verifyEmailUser(code);
   }
 
+  //*********************************************FORGOT USER PASSWORD RESOLVER*********************************************//
+  //**************************************************************************************************************//
+
+
   @Mutation(returns => ForgotUserPasswordOutput)
   async forgotUserPassword(@Args('forgotUserPasswordInput') forgotUserPasswordInput: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput> {
     return this.userService.forgotPasswordUser(forgotUserPasswordInput)
   }
+
+  //*********************************************RESET PASSWORD RESOLVER*********************************************//
+  //**************************************************************************************************************//
 
   @Mutation(returns => ResetPasswordUserOutput)
   async resetPasswordUser(@Args('resetPasswordUserInput') resetPasswordUserInput: ResetPasswordUserInput): Promise<ResetPasswordUserOutput> {

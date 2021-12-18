@@ -2,13 +2,39 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Category {
+  id: Float!
+  createdAt: DateTime!
+  updateAt: DateTime!
+  name: String!
+  coverImage: String!
+  slug: String!
+  restaurants: [Restaurant!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Restaurant {
+  id: Float!
+  createdAt: DateTime!
+  updateAt: DateTime!
+  name: String!
+  address: String!
+  coverImage: String!
+  owner: User!
+  category: Category!
+}
+
 type User {
   id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   firstName: String!
   lastName: String!
-  username: String
+  username: String!
   phoneNumber: Float
   address: String
   birthdate: DateTime
@@ -16,12 +42,8 @@ type User {
   password: String!
   role: UserRole!
   verified: Boolean!
+  restaurants: [Restaurant!]!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 enum UserRole {
   client
@@ -94,6 +116,16 @@ type LoginAdminOutput {
   token: String
 }
 
+type CreateRestaurantOutput {
+  message: String
+  ok: Boolean!
+}
+
+type CreateCategoryOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Query {
   me: UserProfileOutput!
   userProfile(userId: Float!): UserProfileOutput!
@@ -110,6 +142,8 @@ type Mutation {
   resetPasswordUser(resetPasswordUserInput: ResetPasswordUserInput!): ResetPasswordUserOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!
   loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
+  createRestaurant(createRestaurantInput: CreateRestaurantInput!): CreateRestaurantOutput!
+  createCategory(createCategoryInput: CreateCategoryInput!): CreateCategoryOutput!
 }
 
 input CreateUserAccountInput {
@@ -158,4 +192,16 @@ input CreateAdminAccountInput {
 input LoginAdminInput {
   email: String!
   password: String!
+}
+
+input CreateRestaurantInput {
+  name: String!
+  address: String!
+  coverImage: String!
+  categoryName: String!
+}
+
+input CreateCategoryInput {
+  name: String!
+  coverImage: String!
 }

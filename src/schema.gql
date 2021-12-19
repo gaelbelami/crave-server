@@ -127,7 +127,7 @@ type CreateCategoryOutput {
 }
 
 type Query {
-  me: UserProfileOutput!
+  me: User!
   userProfile(userId: Float!): UserProfileOutput!
   Admin: Admin!
 }

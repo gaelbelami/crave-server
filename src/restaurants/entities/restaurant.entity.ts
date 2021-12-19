@@ -30,7 +30,7 @@ export class Restaurant extends CoreEntity {
     coverImage: string;
 
     @Field(type => User)
-    @ManyToOne(type => User, user => user.restaurants)
+    @ManyToOne(type => User, user => user.restaurants, { onDelete: "CASCADE" })
     @IsString()
     owner: User;
 

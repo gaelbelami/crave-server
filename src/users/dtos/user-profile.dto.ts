@@ -6,14 +6,14 @@ import { User } from "../entities/user.entity";
 
 
 @ArgsType()
-export class UserProfileInput{
-    @Field(type =>Number)
+export class UserProfileInput {
+    @Field(type => Number)
     userId: number;
 }
 
 
 @ObjectType()
-export class UserProfileOutput extends CoreOutput{
-    @Field( type => User, {nullable: true})
+export class UserProfileOutput extends CoreOutput {
+    @Field(type => User, { nullable: true })
     user?: User;
 }

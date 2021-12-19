@@ -6,7 +6,7 @@ import { BeforeInsert, Column, Entity } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 
 
-enum AdminRole {
+export enum AdminRole {
   admin = 'admin',
   superAdmin = 'superAdmin',
   moderator = 'moderator',
@@ -14,21 +14,21 @@ enum AdminRole {
 
 registerEnumType(AdminRole, { name: "AdminRole" })
 
-@InputType({isAbstract: true})
+@InputType({ isAbstract: true })
 @ObjectType()
 @Entity()
 export class Admin extends CoreEntity {
-  @Column({nullable: true})
-  @Field({nullable: true})
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   @IsString()
   @Length(5, 15)
   firstName: string;
-  
-  @Column({nullable: true})
-  @Field({nullable: true})
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   @IsString()
   lastName: string;
-  
+
   @Column()
   @Field()
   @IsEmail()
@@ -40,24 +40,23 @@ export class Admin extends CoreEntity {
   @Length(8, 25)
   password: string;
 
-  @Column({ default: AdminRole.superAdmin})
-  @Field({defaultValue: AdminRole.superAdmin})
+  @Column({ default: AdminRole.superAdmin })
+  @Field({ defaultValue: AdminRole.superAdmin })
   @IsString()
-  @IsEnum({AdminRole})
+  @IsEnum({ AdminRole })
   role: AdminRole;
 
 
   @BeforeInsert()
-  async hashPassword(): Promise<void>{
+  async hashPassword(): Promise<void> {
     try {
-      this.password = await bcrypt.hash(this.password, 10)      
+      this.password = await bcrypt.hash(this.password, 10)
     } catch (error) {
-      console.log(error)
-     throw new InternalServerErrorException()
+      throw new InternalServerErrorException()
     }
   }
 
-  async checkPassword(aPassword: string): Promise<boolean>{
+  async checkPassword(aPassword: string): Promise<boolean> {
     try {
       const ok = await bcrypt.compare(aPassword, this.password)
       return ok;

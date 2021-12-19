@@ -21,6 +21,7 @@ import {
 import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
 import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
 import { ResetPasswordUserInput, ResetPasswordUserOutput } from './dtos/reset-user-password.dto';
+import { Role } from 'src/auth/role.decorator';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -50,18 +51,18 @@ export class UserResolver {
   //****************************************AUTHENCTICATED USER RESOLVER*******************************************//
   //**************************************************************************************************************//
 
-  @UseGuards(AuthUserGuard)
-  @Query((returns) => UserProfileOutput)
-  me(@AuthUser() loggedInUser: User) {
-    console.log(loggedInUser);
+
+  @Role(['any'])
+  @Query((returns) => User)
+  async me(@AuthUser() loggedInUser: User) {
     return loggedInUser;
   }
 
   //********************************************USER PROFILE RESOLVER**********************************************//
   //**************************************************************************************************************//
 
-  @UseGuards(AuthUserGuard)
   @Query((returns) => UserProfileOutput)
+  @Role(['any'])
   async userProfile(
     @Args() userProfileInput: UserProfileInput,
   ): Promise<UserProfileOutput> {
@@ -70,8 +71,8 @@ export class UserResolver {
 
   //********************************************DELETE USER ACCOUNT RESOLVER**********************************************//
   //**************************************************************************************************************//
-  @UseGuards(AuthUserGuard)
   @Mutation(returns => DeleteUserAccountOutput)
+  @Role(['any'])
   async deleteUserAccount(@AuthUser() loggedInUser: User): Promise<DeleteUserAccountOutput> {
     console.log(loggedInUser)
     return this.userService.deleteUserAccount(loggedInUser.id)
@@ -81,8 +82,8 @@ export class UserResolver {
   //**********************************************EDIT PROFILE RESOLVER********************************************//
   //**************************************************************************************************************//
 
-  @UseGuards(AuthUserGuard)
   @Mutation((returns) => EditUserProfileOutput)
+  @Role(['any'])
   async editUserProfile(
     @AuthUser() loggedInUser: User,
     @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput,

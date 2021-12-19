@@ -19,7 +19,7 @@ import {
 } from 'class-validator';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 
-enum UserRole {
+export enum UserRole {
   client = 'client',
   owner = 'owner',
   delivery = 'delivery',

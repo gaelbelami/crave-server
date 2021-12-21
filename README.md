@@ -29,3 +29,57 @@ npm i bcrypt
 
 npm i jsonwebtoken
 #Generating a jsonwebtoken
+
+The plan of action
+
+
+## User Model:
+- id
+- createdAt
+- updatedAt
+
+- email
+- password
+- role(client | owner | delivery)
+
+
+## User CRUD:
+
+- Create account
+- Log In
+- See Profile
+- Edit Profile
+- Verify Email
+- Forgot Password
+- Delete User Account
+
+
+
+## RESTAURANTS
+
+## Restaurant Model
+
+- Name 
+- Category
+- Address
+- Cover Image
+
+
+## Restaurant CRUD: 
+
+- Create Restaurant
+- Edit restaurant
+- Delete Restaurant
+
+## RESTAURANTS CATEGORIES
+
+- See Categories
+- See Restaurants by Category (Pagination)
+- See Restaurants (Pagination)
+- See Restaurant
+
+## DISH
+
+- Create Dish
+- Edit Dish
+- Delete Dish

@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CategoryService } from 'src/category/category.service';
 import { Category } from 'src/category/entities/category.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-restaurant.dto';
+import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
 import { Restaurant } from './entities/restaurant.entity';
 
 @Injectable()
@@ -11,28 +13,28 @@ export class RestaurantService {
   constructor(
     @InjectRepository(Restaurant)
     private readonly restaurantRepository: Repository<Restaurant>,
-    @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
+    private readonly categoryService: CategoryService,
   ) { }
+
 
   async createRestaurant(owner: User, { name, address, coverImage, categoryName }: CreateRestaurantInput): Promise<CreateRestaurantOutput> {
 
     try {
       const restaurant = await this.restaurantRepository.findOne({ name });
+
       if (restaurant) {
         return {
           ok: false,
           message: "There is a restaurant with that name already"
         }
       }
-      const newRestaurant = await this.restaurantRepository.create({ name, coverImage, address });
-      const categoryNameTrimmed = categoryName.trim().toLocaleLowerCase();
-      const categorySlug = categoryNameTrimmed.replace(/ /g, '-');
-      let category = await this.categoryRepository.findOne({ slug: categorySlug });
+      const newRestaurant = await this.restaurantRepository.create({ name, address, coverImage });
+
+      let category = await this.categoryService.findByName(categoryName)
       if (!category) {
         return {
           ok: false,
-          message: "No category found"
+          message: "Category not found"
         }
       }
       newRestaurant.owner = owner;
@@ -45,9 +47,45 @@ export class RestaurantService {
     } catch (error) {
       return {
         ok: false,
-        message: "Couldn't create restaurant"
+        message: "Couldn't create restaurant. Please input the right category"
       }
     }
 
+  }
+
+  async editRestaurant(owner: User, editRestaurantInput: EditRestaurantInput): Promise<EditRestaurantOutput> {
+    try {
+      const restaurant = await this.restaurantRepository.findOne(editRestaurantInput.restaurantId, { loadRelationIds: true });
+      if (!restaurant) {
+        return {
+          ok: false,
+          message: "Restaurant not found"
+        }
+      }
+
+      if (owner.id !== restaurant.ownerId) {
+        return {
+          ok: false,
+          message: "You can't edit a restaurant that you don't own",
+        }
+      }
+      let category: Category;
+      if (editRestaurantInput.categoryName) {
+        category = await this.categoryService.findByName(editRestaurantInput.categoryName);
+      }
+
+      await this.restaurantRepository.save([{
+        id: editRestaurantInput.restaurantId,
+        ...editRestaurantInput,
+        ...(category && { category }),
+      }])
+
+      return {
+        ok: true,
+        message: "Edited restaurant successfully"
+      }
+    } catch (error) {
+
+    }
   }
 }

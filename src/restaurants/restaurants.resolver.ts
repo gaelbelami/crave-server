@@ -49,7 +49,7 @@ export class RestaurantResolver {
 
   @Query(returns => RestaurantOutput)
   restaurant(@Args('restaurantInput') restaurantInput: RestaurantInput): Promise<RestaurantOutput> {
-    return this.restaurantService.restaurant(restaurantInput)
+    return this.restaurantService.findRestaurantById(restaurantInput)
   }
 
   @Query(returns => SearchRestaurantOutput)

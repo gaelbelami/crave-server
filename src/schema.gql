@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type DishOption {
+  name: String!
+  choices: String
+  extra: Float
+}
+
 type Dish {
   id: Float!
   createdAt: DateTime!
@@ -11,6 +17,7 @@ type Dish {
   photo: String!
   description: String!
   restaurant: Restaurant
+  options: [DishOption!]
 }
 
 """
@@ -196,6 +203,11 @@ type EditCategoryOutput {
   ok: Boolean!
 }
 
+type CreateDishOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
@@ -241,6 +253,7 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): CreateCategoryOutput!
   editCategory(editCategoryInput: EditCategoryInput!): EditCategoryOutput!
   deleteCategory(deleteCategoryInput: DeleteCategoryInput!): DeleteCategoryOutput!
+  createDish(createDishInput: CreateDishInput!): CreateDishOutput!
 }
 
 input CreateUserAccountInput {
@@ -323,4 +336,19 @@ input EditCategoryInput {
 
 input DeleteCategoryInput {
   categoryId: Float!
+}
+
+input CreateDishInput {
+  name: String!
+  price: Float!
+  photo: String!
+  description: String!
+  options: [DishOptionInputType!]
+  restaurantId: Float!
+}
+
+input DishOptionInputType {
+  name: String!
+  choices: String
+  extra: Float
 }

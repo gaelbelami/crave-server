@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 import { CreateCategoryInput, CreateCategoryOutput } from "./dtos/create-category.dto";
 import { DeleteCategoryInput, DeleteCategoryOutput } from "./dtos/delete-category.dto";
 import { EditCategoryInput, EditCategoryOutput } from "./dtos/edit-category.dto";
@@ -104,6 +105,23 @@ export class CategoryService {
             return {
                 ok: false,
                 message: "Could not delete category. Please try again later"
+            }
+        }
+    }
+
+
+    async allCategories(): Promise<AllCategoriesOutput> {
+        try {
+            const categories = await this.categoryRepository.find();
+            return {
+                ok: true,
+                message: `${categories.length.toString()} categorie(s) found`,
+                categories,
+            }
+        } catch (error) {
+            return {
+                ok: false,
+                message: "Could not load categories"
             }
         }
     }

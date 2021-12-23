@@ -8,6 +8,7 @@ import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-res
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
 import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
+import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
 import { Restaurant } from './entities/restaurant.entity';
 
 @Injectable()
@@ -120,7 +121,7 @@ export class RestaurantService {
     }
   }
 
-  async getAllRestaurnants({ page }: RestaurantInput): Promise<RestaurantOutput> {
+  async getAllRestaurnants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
     try {
       const [restaurants, totalResults] = await this.restaurantRepository.findAndCount({
         skip: (page - 1) * 25,
@@ -136,6 +137,29 @@ export class RestaurantService {
       return {
         ok: false,
         message: "Could not load restaurants"
+      }
+    }
+  }
+
+
+  async restaurant({ restaurantId }: RestaurantInput): Promise<RestaurantOutput> {
+    try {
+      const restaurant = await this.restaurantRepository.findOne(restaurantId);
+      if (!restaurant) {
+        return {
+          ok: false,
+          message: "Restaurant not found",
+        }
+      }
+
+      return {
+        ok: true,
+        restaurant,
+      }
+    } catch (error) {
+      return {
+        ok: false,
+        message: "Could not load restaurant"
       }
     }
   }

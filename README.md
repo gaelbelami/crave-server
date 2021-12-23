@@ -72,10 +72,11 @@ The plan of action
 - Delete Restaurant
 
 ## RESTAURANTS CATEGORIES
-
+ 
 - See Categories
 - See Restaurants by Category (Pagination)
 - See Restaurants (Pagination)
+- Search Restaurant
 - See Restaurant
 
 ## DISH

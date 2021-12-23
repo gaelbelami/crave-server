@@ -138,6 +138,14 @@ type AllCategoriesOutput {
   categories: [Category!]
 }
 
+type CategoryOutput {
+  message: String
+  ok: Boolean!
+  totalPages: Float
+  category: Category
+  restaurants: [Restaurant!]
+}
+
 type CreateCategoryOutput {
   message: String
   ok: Boolean!
@@ -158,6 +166,12 @@ type Query {
   userProfile(userId: Float!): UserProfileOutput!
   Admin: Admin!
   allCategories: AllCategoriesOutput!
+  category(categoryInput: CategoryInput!): CategoryOutput!
+}
+
+input CategoryInput {
+  page: Float = 1
+  categorySlug: String!
 }
 
 type Mutation {

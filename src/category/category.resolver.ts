@@ -2,6 +2,7 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/g
 import { RestaurantService } from "src/restaurants/restaurants.service";
 import { CategoryService } from "./category.service";
 import { AllCategoriesOutput } from "./dtos/all-categories.dto";
+import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
 import { CreateCategoryInput, CreateCategoryOutput } from "./dtos/create-category.dto";
 import { DeleteCategoryInput, DeleteCategoryOutput } from "./dtos/delete-category.dto";
 import { EditCategoryInput, EditCategoryOutput } from "./dtos/edit-category.dto";
@@ -34,13 +35,19 @@ export class CategoryResolver {
     // Dynamic field: Not on the database
     @ResolveField(type => Number)
     restaurantCount(@Parent() category: Category): Promise<number> {
-        return this.restaurantService.countRestaurants(category);
+        return this.categoryService.countRestaurants(category);
     }
 
 
     @Query(returns => AllCategoriesOutput)
     async allCategories(): Promise<AllCategoriesOutput> {
         return this.categoryService.allCategories()
+    }
+
+
+    @Query(returns => CategoryOutput)
+    category(@Args('categoryInput') categoryInput: CategoryInput): Promise<CategoryOutput> {
+        return this.categoryService.findCategoryBySlug(categoryInput);
     }
 
 

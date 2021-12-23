@@ -23,6 +23,8 @@ import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { Category } from './category/entities/category.entity';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { CategoryModule } from './category/category.module';
+import { DishesModule } from './dishes/dishes.module';
+import { Dish } from './dishes/entities/dish.entity';
 
 @Module({
   imports: [
@@ -52,7 +54,7 @@ import { CategoryModule } from './category/category.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin, Restaurant, Category, UserVerification, UserResetPassword],
+      entities: [User, Admin, Restaurant, Category, Dish, UserVerification, UserResetPassword],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
@@ -81,6 +83,8 @@ import { CategoryModule } from './category/category.module';
     RestaurantsModule,
 
     CategoryModule,
+
+    DishesModule,
 
 
 

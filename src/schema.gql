@@ -132,6 +132,14 @@ type EditRestaurantOutput {
   ok: Boolean!
 }
 
+type RestaurantOutput {
+  message: String
+  ok: Boolean!
+  totalPages: Float
+  totalResults: Float
+  results: [Restaurant!]
+}
+
 type AllCategoriesOutput {
   message: String
   ok: Boolean!
@@ -142,6 +150,7 @@ type CategoryOutput {
   message: String
   ok: Boolean!
   totalPages: Float
+  totalResults: Float
   category: Category
   restaurants: [Restaurant!]
 }
@@ -165,8 +174,13 @@ type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   Admin: Admin!
+  getAllRestaurnants(restaurantInput: RestaurantInput!): RestaurantOutput!
   allCategories: AllCategoriesOutput!
   category(categoryInput: CategoryInput!): CategoryOutput!
+}
+
+input RestaurantInput {
+  page: Float = 1
 }
 
 input CategoryInput {

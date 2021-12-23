@@ -146,6 +146,14 @@ type RestaurantsOutput {
   results: [Restaurant!]
 }
 
+type SearchRestaurantOutput {
+  message: String
+  ok: Boolean!
+  totalPages: Float
+  totalResults: Float
+  restaurants: [Restaurant!]
+}
+
 type AllCategoriesOutput {
   message: String
   ok: Boolean!
@@ -182,6 +190,7 @@ type Query {
   Admin: Admin!
   getAllRestaurnants(restaurantInput: RestaurantsInput!): RestaurantsOutput!
   restaurant(restaurantInput: RestaurantInput!): RestaurantOutput!
+  searchRestaurant(searchRestaurantInput: SearchRestaurantInput!): SearchRestaurantOutput!
   allCategories: AllCategoriesOutput!
   category(categoryInput: CategoryInput!): CategoryOutput!
 }
@@ -192,6 +201,11 @@ input RestaurantsInput {
 
 input RestaurantInput {
   restaurantId: Float!
+}
+
+input SearchRestaurantInput {
+  page: Float = 1
+  query: String!
 }
 
 input CategoryInput {

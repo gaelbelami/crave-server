@@ -121,6 +121,11 @@ type CreateRestaurantOutput {
   ok: Boolean!
 }
 
+type DeleteRestaurantOutput {
+  message: String
+  ok: Boolean!
+}
+
 type EditRestaurantOutput {
   message: String
   ok: Boolean!
@@ -159,6 +164,7 @@ type Mutation {
   loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
   createRestaurant(createRestaurantInput: CreateRestaurantInput!): CreateRestaurantOutput!
   editRestaurant(editRestaurantInput: EditRestaurantInput!): EditRestaurantOutput!
+  deleteRestaurant(deleteRestaurantInput: DeleteRestaurantInput!): DeleteRestaurantOutput!
   createCategory(createCategoryInput: CreateCategoryInput!): CreateCategoryOutput!
   editCategory(editCategoryInput: EditCategoryInput!): EditCategoryOutput!
   deleteCategory(deleteCategoryInput: DeleteCategoryInput!): DeleteCategoryOutput!
@@ -224,6 +230,10 @@ input EditRestaurantInput {
   address: String
   coverImage: String
   categoryName: String
+  restaurantId: Float!
+}
+
+input DeleteRestaurantInput {
   restaurantId: Float!
 }
 

@@ -2,9 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type DishChoice {
+  name: String!
+  extra: Float
+}
+
 type DishOption {
   name: String!
-  choices: String
+  choices: [DishChoice!]
   extra: Float
 }
 
@@ -208,6 +213,16 @@ type CreateDishOutput {
   ok: Boolean!
 }
 
+type DeleteDishOutput {
+  message: String
+  ok: Boolean!
+}
+
+type EditDishOutput {
+  message: String
+  ok: Boolean!
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
@@ -254,6 +269,8 @@ type Mutation {
   editCategory(editCategoryInput: EditCategoryInput!): EditCategoryOutput!
   deleteCategory(deleteCategoryInput: DeleteCategoryInput!): DeleteCategoryOutput!
   createDish(createDishInput: CreateDishInput!): CreateDishOutput!
+  editDish(editDishInput: EditDishInput!): EditDishOutput!
+  deleteDish(deleteDishInput: DeleteDishInput!): DeleteDishOutput!
 }
 
 input CreateUserAccountInput {
@@ -349,6 +366,24 @@ input CreateDishInput {
 
 input DishOptionInputType {
   name: String!
-  choices: String
+  choices: [DishChoiceInputType!]
   extra: Float
+}
+
+input DishChoiceInputType {
+  name: String!
+  extra: Float
+}
+
+input EditDishInput {
+  name: String
+  price: Float
+  photo: String
+  description: String
+  options: [DishOptionInputType!]
+  dishId: Float!
+}
+
+input DeleteDishInput {
+  dishId: Float!
 }

@@ -5,7 +5,16 @@ import { CoreEntity } from "src/shared/entities/core.entity";
 import { Column, Entity, ManyToOne, RelationId } from "typeorm";
 
 
+@InputType('DishChoiceInputType', { isAbstract: true })
+@ObjectType()
 
+class DishChoice {
+    @Field(type => String)
+    name: string;
+
+    @Field(type => Number, { nullable: true })
+    extra?: number;
+}
 
 @InputType('DishOptionInputType', { isAbstract: true })
 @ObjectType()
@@ -13,8 +22,8 @@ class DishOption {
     @Field(type => String)
     name: string;
 
-    @Field(type => String, { nullable: true })
-    choices?: string[];
+    @Field(type => [DishChoice], { nullable: true })
+    choices?: DishChoice[];
 
     @Field(type => Number, { nullable: true })
     extra?: number;
@@ -27,7 +36,7 @@ export class Dish extends CoreEntity {
     @Field(type => String)
     @Column()
     @IsString()
-    @Length(15)
+    @Length(5, 15)
     name: string;
 
     @Field(type => Number)

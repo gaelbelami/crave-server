@@ -27,6 +27,8 @@ import { DishesModule } from './dishes/dishes.module';
 import { Dish } from './dishes/entities/dish.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
+import { OrderItem } from './orders/entities/order-item.entity';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -56,14 +58,19 @@ import { Order } from './orders/entities/order.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin, Restaurant, Category, Dish, Order, UserVerification, UserResetPassword],
+      entities: [User, Admin, Restaurant, Category, Dish, Order, OrderItem, UserVerification, UserResetPassword],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
 
     GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({ req }) => ({ admin: req['admin'] } && { user: req['user'] }),
+      context: ({ req, connection }) => {
+        const TOKEN_KEY = 'x-jwt';
+        return { token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY] };
+
+      },
     }),
 
     JwtModule.forRoot({
@@ -90,6 +97,7 @@ import { Order } from './orders/entities/order.entity';
 
     OrdersModule,
 
+    SharedModule,
 
 
   ],

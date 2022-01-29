@@ -42,7 +42,7 @@ export class RestaurantResolver {
   }
 
   @Query(returs => RestaurantsOutput)
-  getAllRestaurnants(@Args('restaurantInput') restaurantsInput: RestaurantsInput): Promise<RestaurantsOutput> {
+  getAllRestaurnants(@Args('restaurantsInput') restaurantsInput: RestaurantsInput): Promise<RestaurantsOutput> {
     return this.restaurantService.getAllRestaurnants(restaurantsInput);
   }
 

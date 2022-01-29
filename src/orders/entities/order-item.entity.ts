@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { Dish, DishChoice, DishOption } from "src/dishes/entities/dish.entity";
+import { Dish } from "src/dishes/entities/dish.entity";
 import { CoreEntity } from "src/shared/entities/core.entity";
 import { Column, Entity, ManyToOne } from "typeorm";
 
@@ -28,3 +28,9 @@ export class OrderItem extends CoreEntity {
     @Column({ type: "json", nullable: true })
     options?: OrderItemOption[]
 }
+
+
+
+/*  First we had dishes and then we realized that a dish
+needs some options that the user choses but by this we
+we had to create the orderItem */

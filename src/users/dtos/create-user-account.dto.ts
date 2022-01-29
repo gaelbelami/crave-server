@@ -4,7 +4,7 @@ import { User } from "../entities/user.entity";
 
 
 @InputType()
-export class CreateUserAccountInput extends PickType(User, ["firstName", "lastName", "email", "password", "role"]){}
+export class CreateUserAccountInput extends PickType(User, ["firstName", "lastName", "email", "password", "role"]) { }
 
 @ObjectType()
-export class CreateUserAccountOutput extends CoreOutput {}
+export class CreateUserAccountOutput extends CoreOutput { }

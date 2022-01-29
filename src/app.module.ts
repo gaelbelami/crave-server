@@ -66,9 +66,16 @@ import { SharedModule } from './shared/shared.module';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({ req, connection }) => {
-        const TOKEN_KEY = 'x-jwt';
-        return { token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY] };
+      subscriptions: {
+        'subscriptions-transport-ws': {
+          onConnect: (connectionParams) => {
+            return connectionParams;
+          }
+        }
+      },
+      context: ({ req }) => {
+        // console.log(req.headers);
+        return req.headers;
 
       },
     }),
@@ -106,11 +113,4 @@ import { SharedModule } from './shared/shared.module';
 })
 
 
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes({
-      path: '/graphql',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+export class AppModule { }

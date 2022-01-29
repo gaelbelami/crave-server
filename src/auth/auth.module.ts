@@ -9,7 +9,7 @@ import { AuthUserGuard } from './auth.user.guard';
     providers: [
         {
             provide: APP_GUARD,
-            useClass: AuthUserGuard || AuthAdminGuard,
+            useClass: AuthUserGuard,
         }
     ]
 })

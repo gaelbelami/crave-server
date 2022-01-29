@@ -160,7 +160,7 @@ export class RestaurantService {
     } catch (error) {
       return {
         ok: false,
-        message: "Could not load restaurant"
+        message: "Could not find restaurant"
       }
     }
   }

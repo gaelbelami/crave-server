@@ -88,4 +88,13 @@ The plan of action
 
 ## ORDERS
 - Orders CRUD
-- Orders Subscription(Owner, Customer, Delivery)
+- Orders Subscription:
+ 
+ -  Pending orders
+ (subscription: newOrder)(trigger: Resolver: createOrder(Event: newOrder))
+
+ - Order Status(Owner, Customer, Delivery)
+ (subscription: orderUpdate) (trigger: Resolver: editOrder(Event: orderUpdate))
+
+ - Pending Pickup Order(Delivery) 
+ (subscription: orderUpdate(cooked)) (trigger: editOrder(Event: orderUpdate))

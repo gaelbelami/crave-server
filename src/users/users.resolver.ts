@@ -55,6 +55,7 @@ export class UserResolver {
   @Role(['any'])
   @Query((returns) => User)
   async me(@AuthUser() loggedInUser: User) {
+    console.log(loggedInUser)
     return loggedInUser;
   }
 

@@ -22,25 +22,31 @@ export class AuthUserGuard implements CanActivate {
             return true;
         }
         const gqlContext = GqlExecutionContext.create(context).getContext();
-        const token = gqlContext.token;
+        const token = gqlContext['x-jwt'];
+
+        if (!token) {
+            return false;
+        }
+
         if (token) {
             const decoded = this.jwtService.verify(token.toString());
             if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
                 const { user } = await this.userService.findUserById(decoded['id']);
-                if (!user) {
-                    return false;
+
+                if (user) {
+                    gqlContext['user'] = user;
+                    if (roles.includes('any')) {
+                        return true;
+                    }
+                    return roles.includes(user.role);
                 }
-                gqlContext['user'] = user;
-                if (roles.includes('any')) {
-                    return true;
-                }
-                return roles.includes(user.role);
+
             } else {
-                return false;
+                return false
             }
-        } else {
-            return false;
         }
+        return false;
+
 
 
     }

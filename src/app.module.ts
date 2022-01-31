@@ -1,20 +1,17 @@
 import {
-  MiddlewareConsumer,
   Module,
-  NestModule,
-  RequestMethod,
 } from '@nestjs/common';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { AdminModule } from './admin/admin.module';
 import { User } from './users/entities/user.entity';
 import { Admin } from './admin/entities/admin.entity';
 import { JwtModule } from './jwt/jwt.module';
-import { JwtMiddleware } from './jwt/jwt.middlewares';
 import { AuthModule } from './auth/auth.module';
 import { UserVerification } from './verification/entities/user.verification.entity';
 import { MailModule } from './mail/mail.module';
@@ -91,6 +88,8 @@ import { Payment } from './payments/entities/payment.entity';
       emailDomain: process.env.MAILGUN_DOMAIN_NAME,
       fromEmail: process.env.MAILGUN_FROM_EMAIL,
     }),
+
+    ScheduleModule.forRoot(),
 
     AuthModule,
 

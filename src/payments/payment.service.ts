@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Cron } from '@nestjs/schedule';
 import { Restaurant } from "src/restaurants/entities/restaurant.entity";
 import { User } from "src/users/entities/user.entity";
-import { Repository } from "typeorm";
+import { LessThan, Repository } from "typeorm";
 import { CreatePaymentInput, CreatePaymentOutput } from "./dtos/create-payment.dto";
 import { GetPaymentOutput } from "./dtos/get-payment.dto";
 import { Payment } from "./entities/payment.entity";
@@ -35,6 +36,11 @@ export class PaymentService {
                 user: owner,
                 restaurant,
             }))
+            restaurant.isPromoted = true;
+            const date = new Date()
+            date.setDate(date.getDate() + 7);
+            restaurant.promotedUntil = date;
+            await this.restaurantRepository.save(restaurant);
             return {
                 ok: true,
                 message: "Payment bundle created successfully"
@@ -42,7 +48,7 @@ export class PaymentService {
         } catch (error) {
             return {
                 ok: false,
-                message: "Something went wrong"
+                message: "Could not create payment."
             }
 
 
@@ -69,6 +75,16 @@ export class PaymentService {
                 message: "Could not load payments"
             }
         }
+    }
+
+    @Cron('0 0 0 * * 1-7')
+    async checkPromotedRestaurants() {
+        const restaurants = await this.restaurantRepository.find({ isPromoted: true, promotedUntil: LessThan(new Date) });
+        restaurants.forEach(async restaurant => {
+            restaurant.isPromoted = false;
+            restaurant.promotedUntil = null;
+            await this.restaurantRepository.save(restaurant)
+        })
     }
 
 

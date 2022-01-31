@@ -29,6 +29,8 @@ import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
 import { SharedModule } from './shared/shared.module';
+import { PaymentModule } from './payments/payment.module';
+import { Payment } from './payments/entities/payment.entity';
 
 @Module({
   imports: [
@@ -58,7 +60,7 @@ import { SharedModule } from './shared/shared.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin, Restaurant, Category, Dish, Order, OrderItem, UserVerification, UserResetPassword],
+      entities: [User, Admin, Restaurant, Category, Dish, Order, OrderItem, UserVerification, UserResetPassword, Payment],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
@@ -105,6 +107,8 @@ import { SharedModule } from './shared/shared.module';
     OrdersModule,
 
     SharedModule,
+
+    PaymentModule,
 
 
   ],

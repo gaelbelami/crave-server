@@ -33,12 +33,12 @@ export class MailService {
     }
 
     sendVerificationEmail(name: string, email: string, code: string) {
-        const url = `http://localhost:3000/verify-email/${code}`
+        const url = `http://localhost:3000/verify-email?code=${code}`
         this.sendEmail("Verify your email", email, "verify-email", [{ key: 'url', value: url }, { key: 'firstName', value: name }, { key: 'email', value: email }])
     }
 
     sendForgotPasswordEmail(name: string, email: string, code: string) {
-        const url = `http://localhost:3000/reset-password/${code}`
+        const url = `http://localhost:3000/reset-password?code=${code}`
         this.sendEmail("Reset password", email, "forgot-password-tokenized", [{ key: 'url', value: url }, { key: 'firstName', value: name }, { key: 'email', value: email }])
     }
 

@@ -179,8 +179,9 @@ export class UserService {
       if (lastName) {
         user.lastName = lastName;
       }
-
-      if (email) {
+      
+      
+      if (email && email !== user.email) {
 
         user.email = email;
 

@@ -79,13 +79,13 @@ export class CategoryService {
 
             return {
                 ok: true,
-                message: "Category created successfully"
+                message: "Category edited successfully"
             }
 
         } catch (error) {
             return {
                 ok: false,
-                message: "Could not edit category"
+                message: error
             }
         }
     }

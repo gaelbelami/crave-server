@@ -107,7 +107,7 @@ type User {
   firstName: String!
   lastName: String!
   username: String!
-  phoneNumber: Float
+  phoneNumber: String
   address: String
   birthdate: DateTime
   email: String!
@@ -204,6 +204,12 @@ type DeleteRestaurantOutput {
 type EditRestaurantOutput {
   message: String
   ok: Boolean!
+}
+
+type MyRestaurantsOutput {
+  message: String
+  ok: Boolean!
+  restaurants: [Restaurant!]!
 }
 
 type RestaurantOutput {
@@ -318,6 +324,7 @@ type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   Admin: Admin!
+  myRestaurants: MyRestaurantsOutput!
   getAllRestaurnants(restaurantsInput: RestaurantsInput!): RestaurantsOutput!
   restaurant(restaurantInput: RestaurantInput!): RestaurantOutput!
   searchRestaurant(searchRestaurantInput: SearchRestaurantInput!): SearchRestaurantOutput!
@@ -397,7 +404,7 @@ input EditUserProfileInput {
   firstName: String
   lastName: String
   username: String
-  phoneNumber: Float
+  phoneNumber: String
   address: String
   birthdate: DateTime
   email: String

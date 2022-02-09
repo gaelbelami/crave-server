@@ -77,6 +77,10 @@ import { Payment } from './payments/entities/payment.entity';
         return req.headers;
 
       },
+      cors: {
+        origin: "http://localhost:3000",
+        credentials: true,
+      }
     }),
 
     JwtModule.forRoot({

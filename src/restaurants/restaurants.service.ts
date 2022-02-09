@@ -7,6 +7,7 @@ import { ILike, Repository } from 'typeorm';
 import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-restaurant.dto';
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
 import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
+import { MyRestaurantsOutput } from './dtos/my-Restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
 import { SearchRestaurantInput, SearchRestaurantOutput } from './dtos/search-restaurant.dto';
@@ -55,6 +56,23 @@ export class RestaurantService {
       }
     }
 
+  }
+
+  async myRestaurants( owner: User): Promise<MyRestaurantsOutput>{
+   try {
+      
+   const restaurants = await this.restaurantRepository.find({owner})
+   
+    return{
+      ok: true,
+      restaurants
+    }
+   } catch (error) {
+     return {
+       ok: false,
+       message: "Could not find restaurants."
+     }
+   }
   }
 
   async editRestaurant(owner: User, editRestaurantInput: EditRestaurantInput): Promise<EditRestaurantOutput> {
@@ -125,8 +143,8 @@ export class RestaurantService {
   async getAllRestaurnants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
     try {
       const [restaurants, totalResults] = await this.restaurantRepository.findAndCount({
-        skip: (page - 1) * 25,
-        take: 25,
+        skip: (page - 1) * 6,
+        take: 6,
         order: {
           isPromoted: 'DESC',
         }
@@ -135,7 +153,7 @@ export class RestaurantService {
         ok: true,
         results: restaurants,
         totalResults,
-        totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / 6),
       }
     } catch (error) {
       return {
@@ -175,15 +193,15 @@ export class RestaurantService {
         where: {
           name: ILike(`%${query}%`),
         },
-        skip: (page - 1) * 25,
-        take: 25,
+        skip: (page - 1) * 6,
+        take: 6,
       });
 
       return {
         ok: true,
         restaurants,
         totalResults,
-        totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / 6),
       }
     } catch (error) {
       return {

@@ -52,9 +52,9 @@ export class User extends CoreEntity {
   username?: string;
 
   @Column({ nullable: true })
-  @Field((type) => Number, { nullable: true })
+  @Field((type) => String, { nullable: true })
   @IsNumber()
-  phoneNumber?: number;
+  phoneNumber?: string;
 
   @Column({ nullable: true })
   @Field((type) => String, { nullable: true })

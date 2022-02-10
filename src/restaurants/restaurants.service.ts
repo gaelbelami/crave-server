@@ -47,6 +47,7 @@ export class RestaurantService {
       await this.restaurantRepository.save(newRestaurant);
       return {
         ok: true,
+        restaurantId: newRestaurant.id,
         message: "Restaurant created successfully"
       }
     } catch (error) {

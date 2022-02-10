@@ -28,6 +28,9 @@ import { OrderItem } from './orders/entities/order-item.entity';
 import { SharedModule } from './shared/shared.module';
 import { PaymentModule } from './payments/payment.module';
 import { Payment } from './payments/entities/payment.entity';
+import { UploadsModule } from './uploads/uploads.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import {Cloudinary} from './cloudinary/cloudinary.provider';
 
 @Module({
   imports: [
@@ -113,10 +116,14 @@ import { Payment } from './payments/entities/payment.entity';
 
     PaymentModule,
 
+    UploadsModule,
+
+    CloudinaryModule,
+
 
   ],
   controllers: [],
-  providers: [],
+  providers: [Cloudinary],
 })
 
 

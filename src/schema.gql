@@ -194,6 +194,7 @@ type LoginAdminOutput {
 type CreateRestaurantOutput {
   message: String
   ok: Boolean!
+  restaurantId: Float!
 }
 
 type DeleteRestaurantOutput {

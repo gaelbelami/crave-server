@@ -7,6 +7,7 @@ import { ILike, Repository } from 'typeorm';
 import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-restaurant.dto';
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
 import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
+import { MyRestaurantInput, MyRestaurantOutput } from './dtos/my-restaurant.dto';
 import { MyRestaurantsOutput } from './dtos/my-Restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
@@ -74,6 +75,21 @@ export class RestaurantService {
        message: "Could not find restaurants."
      }
    }
+  }
+
+  async myRestaurant( owner:User, {id}: MyRestaurantInput): Promise<MyRestaurantOutput> {
+    try {
+      const restaurant = await this.restaurantRepository.findOne({owner, id});
+      return {
+        restaurant,
+        ok:true
+      }
+    } catch (error) {
+      return {
+        ok:false,
+        message: "Could not find restaurant.",
+      }
+    }
   }
 
   async editRestaurant(owner: User, editRestaurantInput: EditRestaurantInput): Promise<EditRestaurantOutput> {

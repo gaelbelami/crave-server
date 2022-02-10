@@ -35,7 +35,7 @@ export class RestaurantResolver {
   @Query(returns => MyRestaurantOutput)
   @Role(["owner"])
   myRestaurant(@AuthUser() owner: User, @Args("myRestaurantInput") myRestaurantInput: MyRestaurantInput): Promise<MyRestaurantOutput>{
-    return this.restaurantService.myRestaurants(owner);
+    return this.restaurantService.myRestaurant(owner, myRestaurantInput);
   }
 
 

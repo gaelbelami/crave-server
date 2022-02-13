@@ -8,7 +8,7 @@ import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-res
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
 import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
 import { MyRestaurantInput, MyRestaurantOutput } from './dtos/my-restaurant.dto';
-import { MyRestaurantsOutput } from './dtos/my-Restaurants.dto';
+import { MyRestaurantsInput, MyRestaurantsOutput } from './dtos/my-Restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
 import { SearchRestaurantInput, SearchRestaurantOutput } from './dtos/search-restaurant.dto';
@@ -60,15 +60,25 @@ export class RestaurantService {
 
   }
 
-  async myRestaurants( owner: User): Promise<MyRestaurantsOutput>{
+  async myRestaurants( owner: User, {page}: MyRestaurantsInput): Promise<MyRestaurantsOutput>{
    try {
       
-   const restaurants = await this.restaurantRepository.find({owner})
-   
-    return{
+  //  const restaurants = await this.restaurantRepository.find({owner})
+   const [ restaurants , totalResults] = await this.restaurantRepository.findAndCount({ 
+    skip: (page - 1) * 6,
+        take: 6,
+        order: {
+          isPromoted: 'DESC',
+        },
+      where: {owner} })
+
+    return {
       ok: true,
-      restaurants
+      results: restaurants,
+      totalResults,
+      totalPages: Math.ceil(totalResults / 6),
     }
+    
    } catch (error) {
      return {
        ok: false,
@@ -79,7 +89,7 @@ export class RestaurantService {
 
   async myRestaurant( owner:User, {id}: MyRestaurantInput): Promise<MyRestaurantOutput> {
     try {
-      const restaurant = await this.restaurantRepository.findOne({owner, id});
+      const restaurant = await this.restaurantRepository.findOne({owner, id}, {relations: ["menu"]});
       return {
         restaurant,
         ok:true
@@ -155,7 +165,7 @@ export class RestaurantService {
         message: "Could not delete the restaurant"
       }
     }
-  }
+  } 
 
   async getAllRestaurnants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
     try {

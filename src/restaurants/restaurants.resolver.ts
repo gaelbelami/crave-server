@@ -6,7 +6,7 @@ import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-res
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
 import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
 import { MyRestaurantInput, MyRestaurantOutput } from './dtos/my-restaurant.dto';
-import { MyRestaurantsOutput } from './dtos/my-Restaurants.dto';
+import { MyRestaurantsInput, MyRestaurantsOutput } from './dtos/my-Restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
 import { SearchRestaurantInput, SearchRestaurantOutput } from './dtos/search-restaurant.dto';
@@ -28,8 +28,8 @@ export class RestaurantResolver {
 
   @Query(returns => MyRestaurantsOutput)
   @Role(["owner"])
-  myRestaurants(@AuthUser() owner: User): Promise<MyRestaurantsOutput>{
-    return this.restaurantService.myRestaurants(owner);
+  myRestaurants(@AuthUser() owner: User, @Args("myRestaurantsInput") myRestaurantsInput: MyRestaurantsInput): Promise<MyRestaurantsOutput>{
+    return this.restaurantService.myRestaurants(owner, myRestaurantsInput);
   }
 
   @Query(returns => MyRestaurantOutput)

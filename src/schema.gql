@@ -216,7 +216,9 @@ type MyRestaurantOutput {
 type MyRestaurantsOutput {
   message: String
   ok: Boolean!
-  restaurants: [Restaurant!]!
+  totalPages: Float
+  totalResults: Float
+  results: [Restaurant!]!
 }
 
 type RestaurantOutput {
@@ -331,7 +333,7 @@ type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   Admin: Admin!
-  myRestaurants: MyRestaurantsOutput!
+  myRestaurants(myRestaurantsInput: MyRestaurantsInput!): MyRestaurantsOutput!
   myRestaurant(myRestaurantInput: MyRestaurantInput!): MyRestaurantOutput!
   getAllRestaurnants(restaurantsInput: RestaurantsInput!): RestaurantsOutput!
   restaurant(restaurantInput: RestaurantInput!): RestaurantOutput!
@@ -341,6 +343,10 @@ type Query {
   getOrders(getOrdersInput: GetOrdersInput!): GetOrdersOutput!
   getOrder(getOrderInput: GetOrderInput!): GetOrderOutput!
   getPayments: GetPaymentOutput!
+}
+
+input MyRestaurantsInput {
+  page: Float = 1
 }
 
 input MyRestaurantInput {

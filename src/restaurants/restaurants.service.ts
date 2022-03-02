@@ -65,8 +65,8 @@ export class RestaurantService {
       
   //  const restaurants = await this.restaurantRepository.find({owner})
    const [ restaurants , totalResults] = await this.restaurantRepository.findAndCount({ 
-    skip: (page - 1) * 6,
-        take: 6,
+    skip: (page - 1) * 9,
+        take: 9,
         order: {
           isPromoted: 'DESC',
         },
@@ -76,7 +76,7 @@ export class RestaurantService {
       ok: true,
       results: restaurants,
       totalResults,
-      totalPages: Math.ceil(totalResults / 6),
+      totalPages: Math.ceil(totalResults / 9),
     }
     
    } catch (error) {
@@ -89,7 +89,7 @@ export class RestaurantService {
 
   async myRestaurant( owner:User, {id}: MyRestaurantInput): Promise<MyRestaurantOutput> {
     try {
-      const restaurant = await this.restaurantRepository.findOne({owner, id}, {relations: ["menu"]});
+      const restaurant = await this.restaurantRepository.findOne({owner, id}, {relations: ["menu", "orders"]});
       return {
         restaurant,
         ok:true
@@ -170,8 +170,8 @@ export class RestaurantService {
   async getAllRestaurnants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
     try {
       const [restaurants, totalResults] = await this.restaurantRepository.findAndCount({
-        skip: (page - 1) * 6,
-        take: 6,
+        skip: (page - 1) * 9,
+        take: 9,
         order: {
           isPromoted: 'DESC',
         }
@@ -180,7 +180,7 @@ export class RestaurantService {
         ok: true,
         results: restaurants,
         totalResults,
-        totalPages: Math.ceil(totalResults / 6),
+        totalPages: Math.ceil(totalResults / 9),
       }
     } catch (error) {
       return {
@@ -220,15 +220,15 @@ export class RestaurantService {
         where: {
           name: ILike(`%${query}%`),
         },
-        skip: (page - 1) * 6,
-        take: 6,
+        skip: (page - 1) * 9,
+        take: 9,
       });
 
       return {
         ok: true,
         restaurants,
         totalResults,
-        totalPages: Math.ceil(totalResults / 6),
+        totalPages: Math.ceil(totalResults / 9),
       }
     } catch (error) {
       return {

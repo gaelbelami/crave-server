@@ -54,7 +54,7 @@ export class Dish extends CoreEntity {
     @Field(type => String)
     @Column()
     @IsString()
-    @Length(5, 140)
+    @Length(5, 280)
     description: string;
 
 

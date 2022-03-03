@@ -181,6 +181,10 @@ export class UserService {
       if (lastName) {
         user.lastName = lastName;
       }
+
+      if(email && email === user.email) {
+        return { ok: false, message: "New Email have to be different to the old one"}
+      }
       
       
       if (email && email !== user.email) {
@@ -394,7 +398,7 @@ export class UserService {
       const passwordCorrect = await existingPassword.checkPassword(oldPassword);
 
       if(!passwordCorrect){
-        return { ok: false, message: "Please input the right password"}
+        return { ok: false, message: "Old password incorrect"}
       }
       
       if(password === oldPassword) {

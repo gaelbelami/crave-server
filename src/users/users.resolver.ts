@@ -22,6 +22,7 @@ import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-u
 import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
 import { ResetPasswordUserInput, ResetPasswordUserOutput } from './dtos/reset-user-password.dto';
 import { Role } from 'src/auth/role.decorator';
+import { ChangePasswordUserInput, ChangePasswordUserOutput } from './dtos/change-password-user.dto';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -121,5 +122,15 @@ export class UserResolver {
   @Mutation(returns => ResetPasswordUserOutput)
   async resetPasswordUser(@Args('resetPasswordUserInput') resetPasswordUserInput: ResetPasswordUserInput): Promise<ResetPasswordUserOutput> {
     return this.userService.resetPasswordUser(resetPasswordUserInput);
+  }
+  
+  
+  //*********************************************CHANGE PASSWORD RESOLVER*********************************************//
+  //**************************************************************************************************************//
+
+  @Mutation(returns => ChangePasswordUserOutput)
+  @Role(['any'])
+  async changePasswordUser(@AuthUser() loggedInUser: User, @Args('changePasswordUserInput') changePasswordUserInput: ChangePasswordUserInput): Promise<ChangePasswordUserOutput> {
+    return this.userService.changePasswordUser(loggedInUser.id, changePasswordUserInput);
   }
 }

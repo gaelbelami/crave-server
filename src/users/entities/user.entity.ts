@@ -51,8 +51,8 @@ export class User extends CoreEntity {
   @Length(3, 15)
   username?: string;
 
-  @Column()
-  @Field(type => String)
+  @Column({ nullable: true })
+  @Field(type => String,  { nullable: true })
   @IsString()
   avatar?: string;
 

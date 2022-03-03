@@ -107,6 +107,7 @@ type User {
   firstName: String!
   lastName: String!
   username: String!
+  avatar: String
   phoneNumber: String
   address: String
   birthdate: DateTime
@@ -165,6 +166,11 @@ type ForgotUserPasswordOutput {
 }
 
 type ResetPasswordUserOutput {
+  message: String
+  ok: Boolean!
+}
+
+type ChangePasswordUserOutput {
   message: String
   ok: Boolean!
 }
@@ -388,6 +394,7 @@ type Mutation {
   verifyEmailUser(verifyEmailUserInput: VerifyEmailInput!): VerifyEmailOutput!
   forgotUserPassword(forgotUserPasswordInput: ForgotUserPasswordInput!): ForgotUserPasswordOutput!
   resetPasswordUser(resetPasswordUserInput: ResetPasswordUserInput!): ResetPasswordUserOutput!
+  changePasswordUser(changePasswordUserInput: ChangePasswordUserInput!): ChangePasswordUserOutput!
   createAdminAccount(createAdminAccountInput: CreateAdminAccountInput!): CreateAdminAccountOutput!
   loginAdmin(loginAdminInput: LoginAdminInput!): LoginAdminOutput!
   createRestaurant(createRestaurantInput: CreateRestaurantInput!): CreateRestaurantOutput!
@@ -422,6 +429,7 @@ input EditUserProfileInput {
   firstName: String
   lastName: String
   username: String
+  avatar: String
   phoneNumber: String
   address: String
   birthdate: DateTime
@@ -440,6 +448,12 @@ input ForgotUserPasswordInput {
 input ResetPasswordUserInput {
   password: String!
   code: String!
+  confirmPassword: String!
+}
+
+input ChangePasswordUserInput {
+  password: String!
+  oldPassword: String!
   confirmPassword: String!
 }
 

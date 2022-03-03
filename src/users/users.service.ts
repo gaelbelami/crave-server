@@ -20,6 +20,7 @@ import { DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
 import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
 import { UserResetPassword } from 'src/verification/entities/user.reset.entity';
 import { ResetPasswordUserInput, ResetPasswordUserOutput } from './dtos/reset-user-password.dto';
+import { ChangePasswordUserInput, ChangePasswordUserOutput } from './dtos/change-password-user.dto';
 
 @Injectable()
 export class UserService {
@@ -166,6 +167,7 @@ export class UserService {
       phoneNumber,
       address,
       birthdate,
+      avatar
     }: EditUserProfileInput,
   ): Promise<EditUserProfileOutput> {
     try {
@@ -217,6 +219,10 @@ export class UserService {
 
       if (phoneNumber) {
         user.phoneNumber = phoneNumber;
+      }
+
+      if (avatar) {
+        user.avatar = avatar;
       }
 
       await this.userRepository.save(user);
@@ -374,6 +380,56 @@ export class UserService {
 
     }
 
+  }
+
+  //*********************************************CHANGE PASSWORD USER SERVICE**********************************************//
+  //**************************************************************************************************************//
+
+  async changePasswordUser(userId: number, {oldPassword, password, confirmPassword}: ChangePasswordUserInput): Promise<ChangePasswordUserOutput> {
+    try { 
+
+
+      const existingPassword = await this.userRepository.findOne(userId,  { select: ['password'] });
+      
+      const passwordCorrect = await existingPassword.checkPassword(oldPassword);
+
+      if(!passwordCorrect){
+        return { ok: false, message: "Please input the right password"}
+      }
+      
+      if(password === oldPassword) {
+        return { ok: false, message: "New password has to be different to the old one"}
+      }
+
+      if( password !== confirmPassword){
+        return { ok: false, message: "Passwords do not match"}
+      }
+
+      const user = await this.userRepository.findOne(userId);
+
+
+      if(!user) {
+        return { ok: false, message: "User not found"} 
+      }
+      
+      
+      console.log(user)
+      
+      
+      if(password){
+        user.password = password;
+      }
+      
+      await this.userRepository.save(user);
+
+      await this.mailService.sendResetPasswordEmail(user.firstName, user.email);
+
+      return { ok: true, message: "Password updated successfully!"}
+
+
+    } catch (error) {
+      return { ok: false, message: "Could not change password"}
+    }
   }
 
 }

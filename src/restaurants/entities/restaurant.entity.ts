@@ -64,9 +64,6 @@ export class Restaurant extends CoreEntity {
     @Column({ nullable: true })
     promotedUntil: Date;
 
-    @Field(type => [Chat])
-    @OneToMany(type => Chat, chat => chat.restaurant)
-    chats: Chat[];
     
     @Field(type => [Chat])
     @OneToMany(type => Message, message => message.sender)

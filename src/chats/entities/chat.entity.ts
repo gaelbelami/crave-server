@@ -11,16 +11,18 @@ import { Entity, ManyToOne, RelationId } from "typeorm";
 @Entity()
 export class Chat extends CoreEntity {
     @Field(type => User)
-    @ManyToOne(type => User, {eager: true})
-    user: User
+    @ManyToOne(type => User, { onDelete: "SET NULL", nullable: true, eager: true })
+    user1: User
 
     // @RelationId((chat: Chat) => chat.user)
     // userId: number
 
-    @Field(type => Restaurant)
-    @ManyToOne( type => Restaurant, {eager: true})
-    restaurant: Restaurant
+    @Field(type => User)
+    @ManyToOne( type => User, { onDelete: "SET NULL", nullable: true, eager: true })
+    user2: User
 
     // @RelationId((chat: Chat) => chat.restaurant)
     // restaurantId: number
+
+    
 }

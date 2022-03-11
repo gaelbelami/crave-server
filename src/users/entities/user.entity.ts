@@ -112,9 +112,6 @@ export class User extends CoreEntity {
   @OneToMany(type => Payment, payment => payment.user)
   payments: Payment[];
 
-  @Field(type => [Chat])
-  @OneToMany(type => Chat, chat => chat.user)
-  chats: Chat[]
 
    @Field(type => [Message])
   @OneToMany(type => Message, message => message.sender)

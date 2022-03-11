@@ -6,8 +6,8 @@ type Chat {
   id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
-  user: User!
-  restaurant: Restaurant!
+  user1: User!
+  user2: User!
 }
 
 """
@@ -107,7 +107,6 @@ type Restaurant {
   orders: [Order!]!
   isPromoted: Boolean!
   promotedUntil: DateTime
-  chats: [Chat!]!
   messages: [Chat!]!
 }
 
@@ -140,7 +139,6 @@ type User {
   orders: [Order!]!
   rides: [Order!]!
   payments: [Payment!]!
-  chats: [Chat!]!
   messages: [Message!]!
 }
 
@@ -369,6 +367,22 @@ type CreateMessageOutput {
   ok: Boolean!
 }
 
+type MyMessagesOutput {
+  message: String
+  ok: Boolean!
+  totalPages: Float
+  totalResults: Float
+  results: [Message!]
+}
+
+type MyChatsOutput {
+  message: String
+  ok: Boolean!
+  totalPages: Float
+  totalResults: Float
+  results: [Chat!]
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
@@ -383,6 +397,8 @@ type Query {
   getOrders(getOrdersInput: GetOrdersInput!): GetOrdersOutput!
   getOrder(getOrderInput: GetOrderInput!): GetOrderOutput!
   getPayments: GetPaymentOutput!
+  myChats(myChatsInput: MyChatsInput!): MyChatsOutput!
+  myMessages(myMessagesInput: MyMessagesInput!): MyMessagesOutput!
 }
 
 input MyRestaurantsInput {
@@ -418,6 +434,15 @@ input GetOrdersInput {
 
 input GetOrderInput {
   id: Float!
+}
+
+input MyChatsInput {
+  page: Float = 1
+}
+
+input MyMessagesInput {
+  page: Float = 1
+  chatId: Float!
 }
 
 type Mutation {
@@ -600,7 +625,7 @@ input CreatePaymentInput {
 }
 
 input CreateChatInput {
-  restaurantId: Float!
+  friendId: Float!
 }
 
 input CreateMessageInput {

@@ -5,8 +5,9 @@ import { Chat } from "../entities/chat.entity";
 
 @InputType()
 export class CreateChatInput  {
+    
     @Field(type => Number)
-    restaurantId: number;
+    friendId: number;
 }
 
 

@@ -2,6 +2,30 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Chat {
+  id: Float!
+  createdAt: DateTime!
+  updateAt: DateTime!
+  user: User!
+  restaurant: Restaurant!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Message {
+  id: Float!
+  createdAt: DateTime!
+  updateAt: DateTime!
+  content: String!
+  see: Boolean!
+  sender: User!
+  chat: Chat!
+  chatId: Float!
+}
+
 type DishChoice {
   name: String!
   extra: Float
@@ -24,11 +48,6 @@ type Dish {
   restaurant: Restaurant!
   options: [DishOption!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type OrderItemOption {
   name: String!
@@ -88,6 +107,8 @@ type Restaurant {
   orders: [Order!]!
   isPromoted: Boolean!
   promotedUntil: DateTime
+  chats: [Chat!]!
+  messages: [Chat!]!
 }
 
 type Payment {
@@ -119,6 +140,8 @@ type User {
   orders: [Order!]!
   rides: [Order!]!
   payments: [Payment!]!
+  chats: [Chat!]!
+  messages: [Message!]!
 }
 
 enum UserRole {
@@ -335,6 +358,17 @@ type GetPaymentOutput {
   payments: [Payment!]
 }
 
+type CreateChatOutput {
+  message: String
+  ok: Boolean!
+  chat: Chat
+}
+
+type CreateMessageOutput {
+  message: Message!
+  ok: Boolean!
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
@@ -410,6 +444,8 @@ type Mutation {
   editOrder(editOrderInput: EditOrderInput!): EditOrderOutput!
   takeOrder(takeOrderInput: TakeOrderInput!): TakeOrderOutput!
   createPayment(createPaymentInput: CreatePaymentInput!): CreatePaymentOutput!
+  findOrCreateChat(createChatInput: CreateChatInput!): CreateChatOutput!
+  sendMessage(createMessageInput: CreateMessageInput!): CreateMessageOutput!
 }
 
 input CreateUserAccountInput {
@@ -563,10 +599,21 @@ input CreatePaymentInput {
   restaurantId: Float!
 }
 
+input CreateChatInput {
+  restaurantId: Float!
+}
+
+input CreateMessageInput {
+  content: String!
+  see: Boolean = false
+  chatId: Float!
+}
+
 type Subscription {
   pendingOrders: Order!
   cookedOrders: Order!
   orderUpdates(orderUpdatesInput: OrderUpdatesInput!): Order!
+  watchMessages: CreateMessageOutput!
 }
 
 input OrderUpdatesInput {

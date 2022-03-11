@@ -42,7 +42,7 @@ export class RestaurantService {
           ok: false,
           message: "Category not found"
         }
-      }
+      } 
       newRestaurant.owner = owner;
       newRestaurant.category = category;
       await this.restaurantRepository.save(newRestaurant);

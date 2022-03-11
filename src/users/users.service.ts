@@ -185,6 +185,10 @@ export class UserService {
       if(email && email === user.email) {
         return { ok: false, message: "New Email have to be different to the old one"}
       }
+
+      if(email && user.verified === false ) {
+        return {ok: false, message: "Please verify your old email first"}
+      } 
       
       
       if (email && email !== user.email) {
@@ -231,11 +235,11 @@ export class UserService {
 
       await this.userRepository.save(user);
 
-      return { ok: true, message: 'Updated profile successfully' };
+      return { ok: true, message: 'Updated successfully' };
 
     } catch (error) {
 
-      return { ok: false, message: 'Could not update profile' };
+      return { ok: false, message: 'Could not update' };
 
     }
   }

@@ -1,5 +1,7 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
+import { Chat } from "src/chats/entities/chat.entity";
+import { Message } from "src/chats/entities/message.entity";
 import { Dish } from "src/dishes/entities/dish.entity";
 import { Order } from "src/orders/entities/order.entity";
 import { CoreEntity } from "src/shared/entities/core.entity";
@@ -52,7 +54,7 @@ export class Restaurant extends CoreEntity {
 
     @Field(type => [Order])
     @OneToMany(type => Order, order => order.restaurant)
-    orders: Order[];
+    orders: Order[];    
 
     @Field(type => Boolean)
     @Column({ default: false })
@@ -61,4 +63,12 @@ export class Restaurant extends CoreEntity {
     @Field(type => Date, { nullable: true })
     @Column({ nullable: true })
     promotedUntil: Date;
+
+    @Field(type => [Chat])
+    @OneToMany(type => Chat, chat => chat.restaurant)
+    chats: Chat[];
+    
+    @Field(type => [Chat])
+    @OneToMany(type => Message, message => message.sender)
+    messages: Message[];
 }

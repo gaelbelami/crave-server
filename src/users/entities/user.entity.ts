@@ -20,6 +20,8 @@ import {
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
+import { Chat } from 'src/chats/entities/chat.entity';
+import { Message } from 'src/chats/entities/message.entity';
 
 export enum UserRole {
   client = 'client',
@@ -109,6 +111,14 @@ export class User extends CoreEntity {
   @Field(type => [Payment])
   @OneToMany(type => Payment, payment => payment.user)
   payments: Payment[];
+
+  @Field(type => [Chat])
+  @OneToMany(type => Chat, chat => chat.user)
+  chats: Chat[]
+
+   @Field(type => [Message])
+  @OneToMany(type => Message, message => message.sender)
+  messages: Chat[]
 
   //*********************************************HASH PASSWORD*********************************************//
   //**************************************************************************************************************//

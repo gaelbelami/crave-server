@@ -31,6 +31,9 @@ import { Payment } from './payments/entities/payment.entity';
 import { UploadsModule } from './uploads/uploads.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import {Cloudinary} from './cloudinary/cloudinary.provider';
+import { ChatsModule } from './chats/chats.module';
+import { Chat } from './chats/entities/chat.entity';
+import { Message } from './chats/entities/message.entity';
 
 @Module({
   imports: [
@@ -60,7 +63,7 @@ import {Cloudinary} from './cloudinary/cloudinary.provider';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Admin, Restaurant, Category, Dish, Order, OrderItem, UserVerification, UserResetPassword, Payment],
+      entities: [User, Admin, Restaurant, Category, Dish, Order, OrderItem, UserVerification, UserResetPassword, Payment, Chat, Message],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
     }),
@@ -119,6 +122,8 @@ import {Cloudinary} from './cloudinary/cloudinary.provider';
     UploadsModule,
 
     CloudinaryModule,
+
+    ChatsModule,
 
 
   ],

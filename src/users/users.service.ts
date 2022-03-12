@@ -307,7 +307,7 @@ export class UserService {
 
 
   //*********************************************FORGOT PASSWORD USER SERVICE**********************************************//
-  //**************************************************************************************************************//
+  //**********************************************************************************************************************//
 
 
   async forgotPasswordUser({ email }: ForgotUserPasswordInput): Promise<ForgotUserPasswordOutput> {
@@ -396,7 +396,6 @@ export class UserService {
   async changePasswordUser(userId: number, {oldPassword, password, confirmPassword}: ChangePasswordUserInput): Promise<ChangePasswordUserOutput> {
     try { 
 
-
       const existingPassword = await this.userRepository.findOne(userId,  { select: ['password'] });
       
       const passwordCorrect = await existingPassword.checkPassword(oldPassword);
@@ -418,11 +417,7 @@ export class UserService {
 
       if(!user) {
         return { ok: false, message: "User not found"} 
-      }
-      
-      
-      console.log(user)
-      
+      }      
       
       if(password){
         user.password = password;
@@ -432,11 +427,11 @@ export class UserService {
 
       await this.mailService.sendResetPasswordEmail(user.firstName, user.email);
 
-      return { ok: true, message: "Password updated successfully!"}
+      return { ok: true, message: "Password updated successfully!" }
 
 
     } catch (error) {
-      return { ok: false, message: "Could not change password"}
+      return { ok: false, message: "Could not change password" }
     }
   }
 

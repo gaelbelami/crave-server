@@ -21,80 +21,77 @@ export class ChatService {
     @InjectRepository(Chat) private readonly chatRepository: Repository<Chat>,
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
-    @InjectRepository(Restaurant)
-    private readonly restaurantRepository: Repository<Restaurant>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @Inject(PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
-  async createChat(
-    userId: number,
-    { friendId }: CreateChatInput,
-  ): Promise<CreateChatOutput> {
+  async createChat( userId: number, { friendId }: CreateChatInput ): Promise<CreateChatOutput> {
+
     try {
 
-      const chat = await this.chatRepository.findOne({
-        where: [{user1: userId, user2: friendId },
-         {user1: friendId, user2: userId }, ]
-      });
-      if (!chat) {
-        const user1 = await this.userRepository.findOne(userId)
-        const user2 = await this.userRepository.findOne(friendId)
-        const newChat = await this.chatRepository.save(
-          this.chatRepository.create({ user1, user2 }),
-        );
+      const chat = await this.chatRepository.findOne({ where: [{user1: userId, user2: friendId }, {user1: friendId, user2: userId }, ] });
 
-        return {
-          ok: true,
-          message: 'Chat created successfully',
-          chat: newChat,
-        };
+      if (!chat) {
+
+        const user1 = await this.userRepository.findOne(userId)
+
+        const user2 = await this.userRepository.findOne(friendId)
+
+        const newChat = await this.chatRepository.save( this.chatRepository.create({ user1, user2 }));
+
+        return { ok: true, message: 'Chat created successfully', chat: newChat };
+
       }
 
       return { ok: true, chat };
+
     } catch (error) {
+
       return { ok: false, message: 'Could not create Chat.' };
+
     }
   }
 
-  async sendMessage(
-    sender: User,
-    { content, chatId }: CreateMessageInput,
-  ): Promise<CreateMessageOutput> {
+  async sendMessage( sender: User, { content, chatId }: CreateMessageInput ): Promise<CreateMessageOutput> {
+
     try {
-      const chat = await this.chatRepository.findOne(chatId, {
-        relations: ['user1', 'user2'],
-      });
+
+      const chat = await this.chatRepository.findOne(chatId, { relations: ['user1', 'user2'] });
       
-      const message = await this.messageRepository.save(
-          this.messageRepository.create({ content, sender, chat }),
-          ); 
-          let whoToSendMessage: number;
-          const { user1, user2 } = chat;
-          const senderId = user1.id;
-          
+      const message = await this.messageRepository.save( this.messageRepository.create({ content, sender, chat })); 
+
+      let whoToSendMessage: number;
+
+      const { user1, user2 } = chat;
+
+      const senderId = user1.id;          
           
       if (user1.id !== sender.id) {
+
         whoToSendMessage = user1.id;
+
       } else {
+
         whoToSendMessage = user2.id;
+
       }
-      this.pubSub.publish(WATCH_MESSAGES, {
-        watchMessages: { message, senderId, messageReceiver: whoToSendMessage },
-      });
+
+      this.pubSub.publish( WATCH_MESSAGES, { watchMessages: { message, senderId, messageReceiver: whoToSendMessage }});
 
       return { ok: true };
+
     } catch (error) {
+
       return { ok: false, message: 'Could not create message' };
+
     }
   }
 
-  async myMessages(
-    user: User,
-    { chatId, page }: MyMessagesInput,
-  ): Promise<MyMessagesOutput> {
+  async myMessages( user: User, { chatId, page }: MyMessagesInput ): Promise<MyMessagesOutput> {
+    
     try {
+
       const results = await this.messageRepository.find({
         where: { chat: chatId, sender: user },
         order: { createdAt: 'ASC' },
@@ -102,26 +99,24 @@ export class ChatService {
         skip: (page - 1) * 50,
         take: 50,
       });
+
       if (!results) {
-        return {
-          ok: false,
-          message: 'No message found',
-        };
+        return { ok: false, message: 'No message found' };
       }
+
       return { ok: true, results };
+
     } catch (error) {
-      return {
-        ok: false,
-        message: 'No message found',
-      };
+
+      return { ok: false, message: 'No message found' };
+
     }
   }
 
-  async myChats(
-    user: User,
-    { page }: MyChatsInput,
-  ): Promise<MyChatsOutput> {
+  async myChats( user: User, { page }: MyChatsInput ): Promise<MyChatsOutput> {
+
     try {
+
       const results = await this.chatRepository.find({
         where: [{ user1:user},{ user2: user }],
         order: { createdAt: 'ASC' },
@@ -129,18 +124,17 @@ export class ChatService {
         skip: (page - 1) * 9,
         take: 9,
       });
+
       if (!results) {
-        return {
-          ok: false,
-          message: 'No chat found',
-        };
+        return { ok: false, message: 'No chat found' };
       }
+
       return { ok: true, results };
+
     } catch (error) {
-      return {
-        ok: false,
-        message: 'No chat found',
-      };
+
+      return { ok: false, message: 'No chat found' };
+
     }
   }
 }

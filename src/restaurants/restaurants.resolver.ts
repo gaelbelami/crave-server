@@ -34,7 +34,7 @@ export class RestaurantResolver {
 
   @Query(returns => MyRestaurantOutput)
   @Role(["owner"])
-  myRestaurant(@AuthUser() owner: User, @Args("myRestaurantInput") myRestaurantInput: MyRestaurantInput): Promise<MyRestaurantOutput>{
+  async myRestaurant(@AuthUser() owner: User, @Args("myRestaurantInput") myRestaurantInput: MyRestaurantInput): Promise<MyRestaurantOutput>{
     return this.restaurantService.myRestaurant(owner, myRestaurantInput);
   }
 
@@ -51,23 +51,23 @@ export class RestaurantResolver {
 
   @Mutation(returns => DeleteRestaurantOutput)
   @Role(['owner'])
-  deleteRestaurant(@AuthUser() owner: User, @Args('deleteRestaurantInput') deleteRestaurantInput: DeleteRestaurantInput): Promise<DeleteRestaurantOutput> {
+  async deleteRestaurant(@AuthUser() owner: User, @Args('deleteRestaurantInput') deleteRestaurantInput: DeleteRestaurantInput): Promise<DeleteRestaurantOutput> {
     return this.restaurantService.deleteRestaurant(owner, deleteRestaurantInput);
   }
 
   @Query(returs => RestaurantsOutput)
-  getAllRestaurnants(@Args('restaurantsInput') restaurantsInput: RestaurantsInput): Promise<RestaurantsOutput> {
+  async getAllRestaurnants(@Args('restaurantsInput') restaurantsInput: RestaurantsInput): Promise<RestaurantsOutput> {
     return this.restaurantService.getAllRestaurnants(restaurantsInput);
   }
 
 
   @Query(returns => RestaurantOutput)
-  restaurant(@Args('restaurantInput') restaurantInput: RestaurantInput): Promise<RestaurantOutput> {
+  async restaurant(@Args('restaurantInput') restaurantInput: RestaurantInput): Promise<RestaurantOutput> {
     return this.restaurantService.findRestaurantById(restaurantInput)
   }
 
   @Query(returns => SearchRestaurantOutput)
-  searchRestaurant(@Args('searchRestaurantInput') searchRestaurantInput: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
+  async searchRestaurant(@Args('searchRestaurantInput') searchRestaurantInput: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
     return this.restaurantService.searchRestaurantByname(searchRestaurantInput);
   }
 }

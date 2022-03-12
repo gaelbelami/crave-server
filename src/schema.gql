@@ -47,6 +47,7 @@ type Dish {
   description: String!
   restaurant: Restaurant!
   options: [DishOption!]
+  quantity: Float!
 }
 
 type OrderItemOption {

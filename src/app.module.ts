@@ -79,7 +79,6 @@ import { Message } from './chats/entities/message.entity';
         }
       },
       context: ({ req }) => {
-        // console.log(req.headers);
         return req.headers;
 
       },

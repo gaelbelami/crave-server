@@ -1,6 +1,4 @@
-import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AuthUserGuard } from 'src/auth/auth.user.guard';
 import { AuthUser } from 'src/auth/auth.user.decorator';
 import {
   CreateUserAccountInput,
@@ -18,7 +16,7 @@ import {
   VerifyEmailInput,
   VerifyEmailOutput,
 } from 'src/verification/dtos/user.verification.dto';
-import { DeleteUserAccountInput, DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
+import { DeleteUserAccountOutput } from './dtos/delete-user-account.dto';
 import { ForgotUserPasswordInput, ForgotUserPasswordOutput } from './dtos/forgot-user-password.dto';
 import { ResetPasswordUserInput, ResetPasswordUserOutput } from './dtos/reset-user-password.dto';
 import { Role } from 'src/auth/role.decorator';
@@ -91,10 +89,7 @@ export class UserResolver {
     @Args('editUserProfileInput') editUserProfileInput: EditUserProfileInput,
   ): Promise<EditUserProfileOutput> {
 
-    return this.userService.editUserProfile(
-      loggedInUser.id,
-      editUserProfileInput,
-    );
+    return this.userService.editUserProfile( loggedInUser.id, editUserProfileInput );
   }
 
   //*********************************************VERIFY EMAIL RESOLVER*********************************************//

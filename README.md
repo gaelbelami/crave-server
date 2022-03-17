@@ -1,100 +1,54 @@
 #Crave Eats
 
-The backend of Crave Eats
+## 📖 Overview
 
-<!-- Git code -->
+This is Crave Eats .<br />
+It is a delivery food service mainly composed of a restaurant, customers, and delivery personnel.<br />
 
-<!-- NPM Packages needed to build this project -->
+<hr />
+<br />
 
-#Validating classes( Entities )
-npm i class-validator
+## 💡 Main Users Roles
 
-#Allow the validation to work through pipelines
-npm install class-transformer
+- 🙍‍♂Client - orders food
+- 👨‍🍳Owner - shop owner who runs the restaurant
+- 🛵Driver - the delivery person
+  <br />
 
-#DB connection
-npm install --save @nestjs/typeorm typeorm pg
+## 📃 Features
 
-#Nest configuration
-npm i --save @nestjs/config
+- Authentication for all the users based on their roles
+- Customer:
 
-#Allows the env files to be accessible on any ecosystem
+  - [x] Ability to RUD his profile
+  - [x] Can order meal or cancel order
 
-npm i cross-env
-#For validating the env variables
-npm i joi
+- Restaurant Owner:
 
-npm i bcrypt
-#For hashing the password
+  - [x] Ability to RUD his profile and the restaurant as well
+  - [x] Can manage the restaurant
+  - [x] Can CRUD dishes
+  - [x] Can accept orders
+  - [x] Can do much more ...
 
-npm i jsonwebtoken
-#Generating a jsonwebtoken
+- Delivery:
 
-The plan of action
+  - [x] Ability to RUD his profile
+  - [x] Can pick up and deliver orders
+  - [x] Can do much more ...
 
+- The delivery process is realtime for all end users
 
-## User Model:
-- id
-- createdAt
-- updatedAt
+- Ability to communicate through chat(customer, restaurant, delivery)
 
-- email
-- password
-- role(client | owner | delivery)
+## 💻 Stack
 
+- [x] Typescript
+- [x] NestJs
+- [x] GraphQL
+- [x] Typeorm
+- [x] Postgres
 
-## User CRUD:
+## 📝 To Do:
 
-- Create account
-- Log In
-- See Profile
-- Edit Profile
-- Verify Email
-- Forgot Password
-- Delete User Account
-
-
-
-## RESTAURANTS
-
-## Restaurant Model
-
-- Name 
-- Category
-- Address
-- Cover Image
-
-
-## Restaurant CRUD: 
-
-- Create Restaurant
-- Edit restaurant
-- Delete Restaurant
-
-## RESTAURANTS CATEGORIES
- 
-- See Categories
-- See Restaurants by Category (Pagination)
-- See Restaurants (Pagination)
-- Search Restaurant
-- See Restaurant
-
-## DISH
-
-- Create Dish
-- Edit Dish
-- Delete Dish
-
-
-## ORDERS
-- Orders CRUD
-- Orders Subscription:
- 
- -  Pending orders
- (subscription: newOrder)(trigger: Resolver: createOrder(Event: newOrder))
-
- - Order Status(Owner, Customer, Delivery)
- (subscription: orderUpdate) (trigger: Resolver: editOrder(Event: orderUpdate))
-
- - Pending Pickup Order(Delivery) 
- (subscription: orderUpdate(cooked)) (trigger: editOrder(Event: orderUpdate))
+- Customer : add favorite dishes

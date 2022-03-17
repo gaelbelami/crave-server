@@ -1,0 +1,101 @@
+
+ #Crave Eats
+
+The backend of Crave Eats
+
+<!-- Git code -->
+
+<!-- NPM Packages needed to build this project -->
+
+#Validating classes( Entities )
+npm i class-validator
+
+#Allow the validation to work through pipelines
+npm install class-transformer
+
+#DB connection
+npm install --save @nestjs/typeorm typeorm pg
+
+#Nest configuration
+npm i --save @nestjs/config
+
+#Allows the env files to be accessible on any ecosystem
+
+npm i cross-env
+#For validating the env variables
+npm i joi
+
+npm i bcrypt
+#For hashing the password
+
+npm i jsonwebtoken
+#Generating a jsonwebtoken
+
+The plan of action
+
+
+## User Model:
+- id
+- createdAt
+- updatedAt
+
+- email
+- password
+- role(client | owner | delivery)
+
+
+## User CRUD:
+
+- Create account
+- Log In
+- See Profile
+- Edit Profile
+- Verify Email
+- Forgot Password
+- Delete User Account
+
+
+
+## RESTAURANTS
+
+## Restaurant Model
+
+- Name 
+- Category
+- Address
+- Cover Image
+
+
+## Restaurant CRUD: 
+
+- Create Restaurant
+- Edit restaurant
+- Delete Restaurant
+
+## RESTAURANTS CATEGORIES
+ 
+- See Categories
+- See Restaurants by Category (Pagination)
+- See Restaurants (Pagination)
+- Search Restaurant
+- See Restaurant
+
+## DISH
+
+- Create Dish
+- Edit Dish
+- Delete Dish
+
+
+## ORDERS
+- Orders CRUD
+- Orders Subscription:
+ 
+ -  Pending orders
+ (subscription: newOrder)(trigger: Resolver: createOrder(Event: newOrder))
+
+ - Order Status(Owner, Customer, Delivery)
+ (subscription: orderUpdate) (trigger: Resolver: editOrder(Event: orderUpdate))
+
+ - Pending Pickup Order(Delivery) 
+ (subscription: orderUpdate(cooked)) (trigger: editOrder(Event: orderUpdate))

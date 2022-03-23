@@ -1,8 +1,8 @@
-# 🍔Crave Eats Backend
+# 🍔 Crave Eats Backend
 
 ## 📖 Overview
 
-This is Crave Eats .<br />
+This is Crave Eats.<br />
 It is a delivery food service mainly composed of a restaurant, customers, and delivery personnel.<br />
 
 <hr />
@@ -52,3 +52,4 @@ It is a delivery food service mainly composed of a restaurant, customers, and de
 ## 📝 To Do:
 
 - Customer : add favorite dishes
+- Order : add quantity

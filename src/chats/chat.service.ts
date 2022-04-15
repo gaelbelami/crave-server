@@ -23,22 +23,29 @@ export class ChatService {
     private readonly messageRepository: Repository<Message>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Restaurant)
+    private readonly restaurantRepository: Repository<Restaurant>,
     @Inject(PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
-  async createChat( userId: number, { friendId }: CreateChatInput ): Promise<CreateChatOutput> {
+  async createChat( userId: number, { friendId, restaurantId }: CreateChatInput ): Promise<CreateChatOutput> {
 
     try {
 
       const chat = await this.chatRepository.findOne({ where: [{user1: userId, user2: friendId }, {user1: friendId, user2: userId }, ] });
+      const restaurant = await this.restaurantRepository.findOne(restaurantId);
+      
+      if(restaurant.ownerId !== friendId || restaurant.ownerId === userId) {
+        return { ok: false, message: "Could not create Chat"}
+      }
 
       if (!chat) {
 
         const user1 = await this.userRepository.findOne(userId)
 
-        const user2 = await this.userRepository.findOne(friendId)
+        const user2 = await this.userRepository.findOne(friendId)       
 
-        const newChat = await this.chatRepository.save( this.chatRepository.create({ user1, user2 }));
+        const newChat = await this.chatRepository.save( this.chatRepository.create({ user1, user2, restaurant }));
 
         return { ok: true, message: 'Chat created successfully', chat: newChat };
 
@@ -59,7 +66,7 @@ export class ChatService {
 
       const chat = await this.chatRepository.findOne(chatId, { relations: ['user1', 'user2'] });
       
-      const message = await this.messageRepository.save( this.messageRepository.create({ content, sender, chat })); 
+      const realTimeMessage = await this.messageRepository.save( this.messageRepository.create({ content, sender, chat })); 
 
       let whoToSendMessage: number;
 
@@ -77,9 +84,9 @@ export class ChatService {
 
       }
 
-      this.pubSub.publish( WATCH_MESSAGES, { watchMessages: { message, senderId, messageReceiver: whoToSendMessage }});
+      this.pubSub.publish( WATCH_MESSAGES, { watchMessages: { realTimeMessage, senderId, messageReceiver: whoToSendMessage }});
 
-      return { ok: true };
+      return { ok: true, realTimeMessage };
 
     } catch (error) {
 
@@ -93,7 +100,7 @@ export class ChatService {
     try {
 
       const results = await this.messageRepository.find({
-        where: { chat: chatId, sender: user },
+        where: { chat: chatId },
         order: { createdAt: 'ASC' },
         relations: ['sender'],
         skip: (page - 1) * 50,

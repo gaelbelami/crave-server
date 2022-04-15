@@ -8,6 +8,9 @@ export class CreateChatInput  {
     
     @Field(type => Number)
     friendId: number;
+
+    @Field(type => Number)
+    restaurantId: number;
 }
 
 

@@ -105,6 +105,7 @@ export class OrderService {
 
             return {
                 ok: true,
+                orderId: order.id,
                 message: "Your order was done successfully"
             }
         } catch (error) {

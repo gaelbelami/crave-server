@@ -29,9 +29,9 @@ export class ChatResolver {
         return this.chatService.sendMessage(loggedInUser, createMessageInput)
     }
 
-    @Subscription(() => CreateMessageOutput,{filter: ({watchMessages: { messageReceiver, message}},_, {user}) => {
+    @Subscription(() => CreateMessageOutput,{filter: ({watchMessages: { messageReceiver, realTimeMessage}},_, {user}) => {
          if(messageReceiver === user.id){
-             return message
+             return realTimeMessage
          }
          return messageReceiver === user.id
     }})

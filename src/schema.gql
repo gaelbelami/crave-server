@@ -8,6 +8,7 @@ type Chat {
   updateAt: DateTime!
   user1: User!
   user2: User!
+  restaurant: Restaurant!
 }
 
 """
@@ -61,6 +62,7 @@ type OrderItem {
   updateAt: DateTime!
   dish: Dish!
   options: [OrderItemOption!]
+  quantity: Float!
 }
 
 type Order {
@@ -108,7 +110,7 @@ type Restaurant {
   orders: [Order!]!
   isPromoted: Boolean!
   promotedUntil: DateTime
-  messages: [Chat!]!
+  messages: [Message!]!
 }
 
 type Payment {
@@ -319,6 +321,7 @@ type EditDishOutput {
 type CreateOrderOutput {
   message: String
   ok: Boolean!
+  orderId: Float
 }
 
 type EditOrderOutput {
@@ -364,8 +367,9 @@ type CreateChatOutput {
 }
 
 type CreateMessageOutput {
-  message: Message!
+  message: String
   ok: Boolean!
+  realTimeMessage: Message!
 }
 
 type MyMessagesOutput {
@@ -604,6 +608,7 @@ input CreateOrderInput {
 input CreateOrderItemInput {
   dishId: Float!
   options: [OrderItemOptionInputType!]
+  quantity: Float!
 }
 
 input OrderItemOptionInputType {
@@ -627,6 +632,7 @@ input CreatePaymentInput {
 
 input CreateChatInput {
   friendId: Float!
+  restaurantId: Float!
 }
 
 input CreateMessageInput {

@@ -34,7 +34,7 @@ export class Restaurant extends CoreEntity {
     coverImage: string;
 
     @Field(type => User)
-    @ManyToOne(type => User, user => user.restaurants, { onDelete: "CASCADE" })
+    @ManyToOne(type => User, user => user.restaurants, { onDelete: "CASCADE" , eager: true})
     @IsString()
     owner: User;
 
@@ -65,7 +65,7 @@ export class Restaurant extends CoreEntity {
     promotedUntil: Date;
 
     
-    @Field(type => [Chat])
+    @Field(type => [Message])
     @OneToMany(type => Message, message => message.sender)
     messages: Message[];
 }

@@ -21,8 +21,7 @@ export class Chat extends CoreEntity {
     @ManyToOne( type => User, { onDelete: "SET NULL", nullable: true, eager: true })
     user2: User
 
-    // @RelationId((chat: Chat) => chat.restaurant)
-    // restaurantId: number
-
-    
+    @Field(type => Restaurant)
+    @ManyToOne(type => Restaurant, {onDelete: "SET NULL", nullable: true, eager: true })
+    restaurant: Restaurant    
 }

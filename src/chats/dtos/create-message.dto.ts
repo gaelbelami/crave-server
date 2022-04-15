@@ -10,5 +10,5 @@ export class CreateMessageInput extends PickType(Message, ["chatId", "content", 
 @ObjectType()
 export class CreateMessageOutput extends CoreOutput {
     @Field(type => Message)
-    message?: string;
+    realTimeMessage?: Message;
 } 

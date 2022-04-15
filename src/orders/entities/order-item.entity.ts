@@ -27,6 +27,10 @@ export class OrderItem extends CoreEntity {
     @Field(type => [OrderItemOption], { nullable: true })
     @Column({ type: "json", nullable: true })
     options?: OrderItemOption[]
+
+    @Field(type => Number, {defaultValue: 0})
+    @Column({default: 0})
+    quantity: number;
 }
 
 

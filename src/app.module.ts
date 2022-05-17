@@ -85,10 +85,7 @@ import { Message } from './chats/entities/message.entity';
         return req.headers;
 
       },
-      cors: {
-        origin: process.env.NODE_ENV="production" ? `https://62833a24277f6b2dd96f0420--marvelous-paletas-079d00.netlify.app/` : "http://localhost:3000",
-        credentials: true,
-      }
+      
     }),
 
     JwtModule.forRoot({

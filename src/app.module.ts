@@ -69,6 +69,7 @@ import { Message } from './chats/entities/message.entity';
     }),
 
     GraphQLModule.forRoot({
+      playground: process.env.NODE_ENV !== 'production',
       installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       subscriptions: {

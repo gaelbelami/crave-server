@@ -84,7 +84,7 @@ export class ChatService {
 
       }
 
-      this.pubSub.publish( WATCH_MESSAGES, { watchMessages: { realTimeMessage, senderId, messageReceiver: whoToSendMessage }});
+      this.pubSub.publish( WATCH_MESSAGES, { watchMessages: {ok: true, realTimeMessage, senderId, messageReceiver: whoToSendMessage }});
 
       return { ok: true, realTimeMessage };
 
@@ -103,8 +103,6 @@ export class ChatService {
         where: { chat: chatId },
         order: { createdAt: 'ASC' },
         relations: ['sender'],
-        skip: (page - 1) * 50,
-        take: 50,
       });
 
       if (!results) {

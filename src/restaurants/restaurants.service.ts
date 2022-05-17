@@ -8,10 +8,10 @@ import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-res
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
 import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
 import { MyRestaurantInput, MyRestaurantOutput } from './dtos/my-restaurant.dto';
-import { MyRestaurantsInput, MyRestaurantsOutput } from './dtos/my-restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
 import { SearchRestaurantInput, SearchRestaurantOutput } from './dtos/search-restaurant.dto';
+import { MyRestaurantsInput, MyRestaurantsOutput } from './dtos/my-restaurants.dto';
 import { Restaurant } from './entities/restaurant.entity';
 
 @Injectable()

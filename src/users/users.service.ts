@@ -81,7 +81,7 @@ export class UserService {
 
     } catch (error) {
 
-      return { ok: false, message: error };
+      return { ok: false, message: "Couldn't create account. Please try again." };
 
     }
   }
